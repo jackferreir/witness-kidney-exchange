@@ -31,8 +31,16 @@ clearing mechanism is allowed to use 3-cycles:
 Figures are the fraction of hospitals with an exhaustively-verified,
 strictly-profitable way to withhold a subset of their own pairs. At P >=
 250: 1.2% (5/405) vs 12.3% (24/195), one-sided Fisher exact p ~= 1.6e-8.
-At P = 50-100 the two are statistically indistinguishable — **the
-divergence is a large-market phenomenon, not a small-market artifact.**
+At P = 50-100 the two are statistically indistinguishable (p = 0.41 and
+p = 0.25 respectively) — **the divergence is a large-market phenomenon,
+not a small-market artifact.**
+
+Raw counts behind the P >= 250 figures: 2-cycles from
+`results/kidney_real_data_sweep_v2/summary.json` (4/300 at P=250, 1/105 at
+P=500); 3-cycles from `results/kidney_k3_real_sweep_v2/summary.json`
+(13/150 at P=250) plus `results/kidney_k3_real_p500_supplement/summary.json`
+(11/45 at P=500, run separately due to per-instance solve time at this
+size).
 
 A follow-up full census (every hospital checked per market, not one
 sampled hospital per market, closing an undercounting gap found partway
