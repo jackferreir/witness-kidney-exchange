@@ -1,0 +1,21 @@
+{
+  "edge_density": 0.15,
+  "honesty_note": "This generator's compatibility graph is synthetic, not the downloadable Petris et al. benchmark KIDNEY_EXCHANGE_SCOPE.md's data plan calls for -- this rate characterizes this small synthetic generator only.",
+  "manipulation_rate": 0.0022222222222222222,
+  "max_central_space": 1048576,
+  "max_report_space": 1048576,
+  "n_candidates_found": 20,
+  "n_confirmed": 20,
+  "n_hospital_targets_examined": 9000,
+  "n_hospitals": 3,
+  "n_instances": 3000,
+  "n_instances_with_any_edge": 2977,
+  "n_pairs": 6,
+  "n_verification_failures": 0,
+  "nonvacuity": {
+    "any_candidate_found_before_verification": true,
+    "generator_produces_edges": true
+  },
+  "seed": "kidney-sweep-density015",
+  "wall_seconds": 2.059661250008503
+}

@@ -1,0 +1,49 @@
+Dataset: Assignment Feedback in School Choice Mechanisms (lab experiment data)
+Zenodo record: https://zenodo.org/records/6791431
+Zenodo API record (used to obtain the license/metadata and per-file checksums
+quoted below): https://zenodo.org/api/records/6791431
+DOI: 10.5281/zenodo.6791431
+Accessed: 2026-09-04
+
+Files downloaded (direct content URLs, via Zenodo's file API):
+
+  SchoolChoiceData.csv
+    URL: https://zenodo.org/api/records/6791431/files/SchoolChoiceData.csv/content
+    size: 90130901 bytes
+    md5 (as reported by Zenodo's own API, field "checksum"): 04b4da68d4afe6abffc5833ddc746148
+    sha256 (computed locally with `shasum -a 256`):
+      4e31f2d9db56351c3e100cc58326535b129963c5498b0f593f2f4a772ad7c111
+
+  README.txt  (saved locally as ZENODO_README.txt to avoid colliding with this
+               directory's own SOURCE.txt/README; content is verbatim, unmodified)
+    URL: https://zenodo.org/api/records/6791431/files/README.txt/content
+    size: 2590 bytes
+    md5 (as reported by Zenodo's own API): efff46b863be5f9e9bfc46dca64b88b7
+    sha256 (computed locally):
+      45aaee367756c62deac0f406a39d038a0c4f3a2c5a81bfd0cded7e4ee7596496
+
+Verification performed at download time:
+  - Downloaded file size for SchoolChoiceData.csv matched the size Zenodo's
+    API reports for that file (90130901 bytes) exactly.
+  - Locally computed MD5 of SchoolChoiceData.csv matched the checksum Zenodo's
+    API reports for that file exactly (04b4da68d4afe6abffc5833ddc746148).
+  - Downloaded file size for README.txt matched Zenodo's reported size (2590
+    bytes) exactly.
+
+Files NOT downloaded (present in the Zenodo record but out of scope for this
+ingestion — they are experiment software and analysis scripts, not data, and
+are not needed for the sanity-check parser):
+  - Analysis.zip (4166362 bytes, md5 74c603b6df43c6c30ab2a35ef35fa730) —
+    R/Python scripts used to produce the paper's statistical analysis and
+    figures (MaxLik.py, PathByPeriod.r, RankSumTest.r, Truth.r, etc.).
+  - Program.zip (15455733 bytes, md5 4975d6d45f558e2e80a7aac4d39c4cba) —
+    the Windows .exe/.dll client-server software used to run the lab
+    experiment sessions.
+  Both are covered by the same CC-BY-4.0 license as the data file and can be
+  fetched from the same record if a future task needs them; they were left
+  out here to keep this ingestion scoped to the actual dataset.
+
+License: CC-BY-4.0, per Zenodo API metadata: metadata.license.id == "cc-by-4.0"
+Access right: "open" (metadata.access_right == "open")
+See ../README.md for the full license discussion and the paper this data
+supports.

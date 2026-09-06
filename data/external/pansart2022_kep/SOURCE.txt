@@ -1,0 +1,65 @@
+Dataset: Pansart et al. 2022 kidney-exchange benchmark instances
+(distributed as a fixture subset inside the INFORMS Journal on Computing
+code/data archive for Petris, Archetti, Cattaruzza, Ogier & Semet,
+"A Branch-Price-and-Cut Algorithm for the Kidney Exchange Problem",
+INFORMS Journal on Computing, 2025, DOI 10.1287/ijoc.2024.0664 / repo DOI
+10.1287/ijoc.2024.0664.cd)
+
+Named in KIDNEY_EXCHANGE_SCOPE.md's data plan as the "small, easy-to-version
+fixture source" (as opposed to the full 437MB primary Petris et al. testbed,
+DOI 10.57745/IHQAPY, not downloaded here).
+
+Source repo:        https://github.com/INFORMSJoC/2024.0664
+Pinned commit:       2051a02181aa6181c3b68417a9f3b430fa04370c (repo's HEAD
+                     of `main` at access time)
+Accessed:            2026-09-05
+
+Files fetched (raw, byte-for-byte, from the pinned commit above):
+  Pansart2022.zip            21,528,489 bytes
+    sha256: 404e6a729c2d7dcc0a81b1756acbbce8803e2b4523db510b5334c91274716a3f
+    URL: https://raw.githubusercontent.com/INFORMSJoC/2024.0664/2051a02181aa6181c3b68417a9f3b430fa04370c/data/Pansart2022.zip
+  ORIGINAL_README.md         2,514 bytes (repo's own top-level README.md)
+    sha256: 4cd3cf802f4233916bd32373a714d6b97cb774169d8cd990cc09f051175f1d1c
+    URL: https://raw.githubusercontent.com/INFORMSJoC/2024.0664/2051a02181aa6181c3b68417a9f3b430fa04370c/README.md
+  ORIGINAL_LICENSE            1,122 bytes (repo's own LICENSE file)
+    sha256: 5ab6c58f9a14ca398b4dea60ad23a7945c6ac9802150e9f6033dcc0e6b1311ad
+    URL: https://raw.githubusercontent.com/INFORMSJoC/2024.0664/2051a02181aa6181c3b68417a9f3b430fa04370c/LICENSE
+  ORIGINAL_DATA_README.md       765 bytes (repo's own data/README.md,
+                                describing the instance file format)
+    sha256: e5adf99265564e91932a78af383370b7642e0fb5b1e79e19f6b0de76867c8580
+    URL: https://raw.githubusercontent.com/INFORMSJoC/2024.0664/2051a02181aa6181c3b68417a9f3b430fa04370c/data/README.md
+
+License: MIT (confirmed directly from the fetched ORIGINAL_LICENSE file
+above, and independently corroborated by the repo's own top-level
+README.md, which states in its header: "This archive is distributed in
+association with the INFORMS Journal on Computing under the MIT License.").
+
+What this is: real kidney-exchange compatibility-graph instances from a
+published, peer-reviewed operations-research paper ("Pansart et al. 2022",
+introduced in arXiv:2201.08446 and reused as a benchmark by the Petris et
+al. 2025 IJOC paper this repo accompanies). NOT randomly generated for this
+project -- see ORIGINAL_DATA_README.md for the paper's own instance format
+description (patient-donor pair count P, altruistic donor count N, max
+cycle length K, max chain length L, and an (N+P) x P medical-benefit
+matrix, -1 meaning "transplant not feasible").
+
+What this is NOT: real hospital ownership. Pair-to-hospital assignment is
+not part of this file format at all (it is a pure compatibility-graph
+benchmark, no institutional/ownership metadata) -- see
+`witness/kidney_real_data.py`'s module docstring for the declared synthetic
+partition rule applied on top of this real graph, and
+KIDNEY_EXCHANGE_SCOPE.md's "Data plan and evidence boundary" table, which
+states this explicitly for exactly this reason.
+
+Restrictions on use noticed: none beyond MIT-license attribution.
+
+Not downloaded (out of scope for this project's two-way-only, no-chains
+model, and not needed): `Pansart2022/Instances_Pansart2022.zip` (a nested
+zip inside the fetched archive containing what appear to be additional/
+alternate-format instance files) and the four alternate max-chain-length
+(`l3`/`l6`/`l12`) variants per (P, N) combination beyond the one used by
+`parsed.py` -- this project's model has no chains at all (see
+`witness/kidney.py`'s module docstring), so L is irrelevant to which
+variant is used; `parsed.py` reads the `_l3_0` instance for each (P, N)
+pair (arbitrary among the L-variants, since L doesn't affect our model, and
+replicate index 0 among the 5 available per (P, N, K, L) combination).

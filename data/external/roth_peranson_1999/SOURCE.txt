@@ -1,0 +1,14 @@
+Roth, Alvin E., and Elliott Peranson. 1999. "The Redesign of the Matching
+Market for American Physicians: Some Engineering Aspects of Economic Design."
+American Economic Review 89(4): 748-780.
+
+Source URL: https://natmatch.com/documents/rothperansonaer.pdf
+Hosted directly by the National Resident Matching Program (natmatch.com).
+Publicly downloadable, no paywall, no data-use agreement -- this is the
+algorithm's own published specification, not NRMP applicant data. NRMP's
+AI/ML data-use restriction applies to their DATA, not to their own published
+description of their algorithm.
+
+Accessed: 2026-09-05
+sha256: (see checksum below, computed at access time)
+a6296929c422e2149d06019c1d6b88fec589c92c055df66e7590731bbba4ff91  data/external/roth_peranson_1999/rothperansonaer.pdf

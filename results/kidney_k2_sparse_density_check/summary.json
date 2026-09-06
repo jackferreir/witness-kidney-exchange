@@ -1,0 +1,67 @@
+{
+  "edge_density": 0.06,
+  "honesty_note": "n_checks shrinks at larger sizes (clearing cost scales worse than linearly), so zero confirmed hits at the largest sizes is NOT proof the true rate is zero -- only that it is small enough not to appear in that sample size. See this script's own module docstring.",
+  "max_cycle_length": 2,
+  "n_total_checks": 2800,
+  "n_total_verification_failures": 0,
+  "pairs_per_hospital": 6,
+  "per_size": [
+    {
+      "manipulation_rate": 0.004,
+      "n_checks": 1000,
+      "n_confirmed": 4,
+      "n_hospitals": 5,
+      "n_pairs": 30,
+      "n_verification_failures": 0,
+      "pairs_per_hospital": 6,
+      "seconds_per_check": 0.010345249250007328,
+      "wall_seconds": 10.345249250007328
+    },
+    {
+      "manipulation_rate": 0.005,
+      "n_checks": 1000,
+      "n_confirmed": 5,
+      "n_hospitals": 8,
+      "n_pairs": 48,
+      "n_verification_failures": 0,
+      "pairs_per_hospital": 6,
+      "seconds_per_check": 0.023159883917003753,
+      "wall_seconds": 23.159883917003754
+    },
+    {
+      "manipulation_rate": 0.004,
+      "n_checks": 500,
+      "n_confirmed": 2,
+      "n_hospitals": 17,
+      "n_pairs": 102,
+      "n_verification_failures": 0,
+      "pairs_per_hospital": 6,
+      "seconds_per_check": 0.09260560933401575,
+      "wall_seconds": 46.30280466700788
+    },
+    {
+      "manipulation_rate": 0.0,
+      "n_checks": 200,
+      "n_confirmed": 0,
+      "n_hospitals": 40,
+      "n_pairs": 240,
+      "n_verification_failures": 0,
+      "pairs_per_hospital": 6,
+      "seconds_per_check": 0.6141138691650121,
+      "wall_seconds": 122.82277383300243
+    },
+    {
+      "manipulation_rate": 0.0,
+      "n_checks": 100,
+      "n_confirmed": 0,
+      "n_hospitals": 80,
+      "n_pairs": 480,
+      "n_verification_failures": 0,
+      "pairs_per_hospital": 6,
+      "seconds_per_check": 3.3392817241699957,
+      "wall_seconds": 333.9281724169996
+    }
+  ],
+  "seed": "kidney-k2-sparse-density-check",
+  "tiebreak_policy": "max_cardinality_blossom"
+}

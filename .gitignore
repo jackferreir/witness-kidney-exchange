@@ -1,0 +1,32 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Third-party research datasets NOT related to the kidney-exchange finding
+# this repo is scoped to -- excluded here rather than partially audited for
+# redistribution rights on a fast timeline. See data/external/README.md for
+# the license findings on each (Zenodo: CC-BY-4.0, redistribution-safe but
+# out of scope here; UMass: MIT per repo README prose; SFUSD: explicitly
+# NOT cleared for redistribution).
+data/external/zenodo_6791431_stephenson_school_choice/*.csv
+data/external/zenodo_6791431_stephenson_school_choice/*.zip
+data/external/umass_cs_course_allocation/*.csv
+data/external/umass_cs_course_allocation/*.xlsx
+data/external/sfusd_2017_kindergarten/
+
+# SFUSD raw files sitting loose at repo root -- unrelated dataset, same
+# redistribution caution as above.
+SFUSD*.csv
+
+# Result directories from OTHER mechanisms (couples, DA, TTC, reserves) --
+# out of scope for this kidney-exchange-focused repo.
+results/couples_sequencing/
+results/negative_control*/
+results/reserve_da_*/
+results/reserve_da_*.log
+results/search_couples_*/
+results/search_power_3a.jsonl
+results/singleton_scaling.json
+results/top_trading_cycles_v1/
+results/witnesses_3a.jsonl
+.claude/

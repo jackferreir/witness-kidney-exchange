@@ -1,0 +1,8 @@
+{
+  "honesty_note": "FIRST-ORDER simultaneous deviation, not a Nash equilibrium: each hospital plays its best response to the TRUTHFUL baseline, not to what others are doing. A hospital whose gain did NOT survive might have a DIFFERENT profitable deviation once others have moved -- that requires iterating to a fixed point, which this script does not attempt.",
+  "mean_aggregate_matched_pairs_delta": null,
+  "n_deviators_total": 0,
+  "n_gains_that_survived_simultaneous_play": 0,
+  "n_markets_with_2plus_simultaneous_deviators": 0,
+  "results": []
+}

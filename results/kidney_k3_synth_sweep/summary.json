@@ -1,0 +1,34 @@
+{
+  "edge_density": 0.06,
+  "honesty_note": "n_checks shrinks at larger sizes (clearing cost scales worse than linearly), so zero confirmed hits at the largest sizes is NOT proof the true rate is zero -- only that it is small enough not to appear in that sample size. See this script's own module docstring.",
+  "max_cycle_length": 3,
+  "n_total_checks": 160,
+  "n_total_verification_failures": 0,
+  "pairs_per_hospital": 6,
+  "per_size": [
+    {
+      "manipulation_rate": 0.0,
+      "n_checks": 100,
+      "n_confirmed": 0,
+      "n_hospitals": 8,
+      "n_pairs": 48,
+      "n_verification_failures": 0,
+      "pairs_per_hospital": 6,
+      "seconds_per_check": 0.15102500625012907,
+      "wall_seconds": 15.102500625012908
+    },
+    {
+      "manipulation_rate": 0.05,
+      "n_checks": 60,
+      "n_confirmed": 3,
+      "n_hospitals": 17,
+      "n_pairs": 102,
+      "n_verification_failures": 0,
+      "pairs_per_hospital": 6,
+      "seconds_per_check": 1.3992368444499637,
+      "wall_seconds": 83.95421066699782
+    }
+  ],
+  "seed": "kidney-k3-synth-v1",
+  "tiebreak_policy": "max_cardinality_ilp"
+}

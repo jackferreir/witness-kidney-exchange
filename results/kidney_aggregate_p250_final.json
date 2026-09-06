@@ -1,0 +1,335 @@
+{
+  "honesty_note": "FIRST-ORDER simultaneous deviation, not a Nash equilibrium: each hospital plays its best response to the TRUTHFUL baseline, not to what others are doing. A hospital whose gain did NOT survive might have a DIFFERENT profitable deviation once others have moved -- that requires iterating to a fixed point, which this script does not attempt.",
+  "mean_aggregate_matched_pairs_delta": -1.0,
+  "n_deviators_total": 32,
+  "n_gains_that_survived_simultaneous_play": 12,
+  "n_markets_with_2plus_simultaneous_deviators": 5,
+  "results": [
+    {
+      "aggregate_matched_pairs_delta": -1,
+      "aggregate_utility_delta": -1,
+      "declared_p": 250,
+      "deviators": [
+        {
+          "actual_gain_when_all_deviate": -1,
+          "actual_utility_when_all_deviate": 3,
+          "gain_survived": false,
+          "hospital": "h9",
+          "predicted_solo_gain": 1,
+          "truthful_utility": 4
+        },
+        {
+          "actual_gain_when_all_deviate": 1,
+          "actual_utility_when_all_deviate": 2,
+          "gain_survived": true,
+          "hospital": "h23",
+          "predicted_solo_gain": 1,
+          "truthful_utility": 1
+        },
+        {
+          "actual_gain_when_all_deviate": 1,
+          "actual_utility_when_all_deviate": 4,
+          "gain_survived": true,
+          "hospital": "h28",
+          "predicted_solo_gain": 1,
+          "truthful_utility": 3
+        },
+        {
+          "actual_gain_when_all_deviate": 0,
+          "actual_utility_when_all_deviate": 2,
+          "gain_survived": false,
+          "hospital": "h34",
+          "predicted_solo_gain": 1,
+          "truthful_utility": 2
+        },
+        {
+          "actual_gain_when_all_deviate": 1,
+          "actual_utility_when_all_deviate": 2,
+          "gain_survived": false,
+          "hospital": "h38",
+          "predicted_solo_gain": 2,
+          "truthful_utility": 1
+        },
+        {
+          "actual_gain_when_all_deviate": 0,
+          "actual_utility_when_all_deviate": 2,
+          "gain_survived": false,
+          "hospital": "h39",
+          "predicted_solo_gain": 1,
+          "truthful_utility": 2
+        },
+        {
+          "actual_gain_when_all_deviate": -1,
+          "actual_utility_when_all_deviate": 1,
+          "gain_survived": false,
+          "hospital": "h40",
+          "predicted_solo_gain": 1,
+          "truthful_utility": 2
+        }
+      ],
+      "joint_total_matched_pairs": 110,
+      "joint_total_utility": 110,
+      "n_simultaneous_deviators": 7,
+      "ownership_draw_index": 8,
+      "source_member": "Pansart2022/KEP_p250_n13_k3_l3_4.txt",
+      "truthful_total_matched_pairs": 111,
+      "truthful_total_utility": 111
+    },
+    {
+      "aggregate_matched_pairs_delta": -1,
+      "aggregate_utility_delta": -1,
+      "declared_p": 250,
+      "deviators": [
+        {
+          "actual_gain_when_all_deviate": 0,
+          "actual_utility_when_all_deviate": 1,
+          "gain_survived": false,
+          "hospital": "h4",
+          "predicted_solo_gain": 1,
+          "truthful_utility": 1
+        },
+        {
+          "actual_gain_when_all_deviate": 1,
+          "actual_utility_when_all_deviate": 3,
+          "gain_survived": true,
+          "hospital": "h6",
+          "predicted_solo_gain": 1,
+          "truthful_utility": 2
+        },
+        {
+          "actual_gain_when_all_deviate": 1,
+          "actual_utility_when_all_deviate": 2,
+          "gain_survived": true,
+          "hospital": "h23",
+          "predicted_solo_gain": 1,
+          "truthful_utility": 1
+        },
+        {
+          "actual_gain_when_all_deviate": 1,
+          "actual_utility_when_all_deviate": 4,
+          "gain_survived": true,
+          "hospital": "h40",
+          "predicted_solo_gain": 1,
+          "truthful_utility": 3
+        }
+      ],
+      "joint_total_matched_pairs": 103,
+      "joint_total_utility": 103,
+      "n_simultaneous_deviators": 4,
+      "ownership_draw_index": 3,
+      "source_member": "Pansart2022/KEP_p250_n28_k3_l3_2.txt",
+      "truthful_total_matched_pairs": 104,
+      "truthful_total_utility": 104
+    },
+    {
+      "aggregate_matched_pairs_delta": 0,
+      "aggregate_utility_delta": 0,
+      "declared_p": 250,
+      "deviators": [
+        {
+          "actual_gain_when_all_deviate": 0,
+          "actual_utility_when_all_deviate": 1,
+          "gain_survived": false,
+          "hospital": "h2",
+          "predicted_solo_gain": 1,
+          "truthful_utility": 1
+        },
+        {
+          "actual_gain_when_all_deviate": 0,
+          "actual_utility_when_all_deviate": 3,
+          "gain_survived": false,
+          "hospital": "h4",
+          "predicted_solo_gain": 1,
+          "truthful_utility": 3
+        },
+        {
+          "actual_gain_when_all_deviate": 0,
+          "actual_utility_when_all_deviate": 2,
+          "gain_survived": false,
+          "hospital": "h7",
+          "predicted_solo_gain": 1,
+          "truthful_utility": 2
+        },
+        {
+          "actual_gain_when_all_deviate": 0,
+          "actual_utility_when_all_deviate": 2,
+          "gain_survived": false,
+          "hospital": "h27",
+          "predicted_solo_gain": 1,
+          "truthful_utility": 2
+        },
+        {
+          "actual_gain_when_all_deviate": 0,
+          "actual_utility_when_all_deviate": 2,
+          "gain_survived": false,
+          "hospital": "h38",
+          "predicted_solo_gain": 2,
+          "truthful_utility": 2
+        }
+      ],
+      "joint_total_matched_pairs": 103,
+      "joint_total_utility": 103,
+      "n_simultaneous_deviators": 5,
+      "ownership_draw_index": 1,
+      "source_member": "Pansart2022/KEP_p250_n28_k3_l3_3.txt",
+      "truthful_total_matched_pairs": 103,
+      "truthful_total_utility": 103
+    },
+    {
+      "aggregate_matched_pairs_delta": -1,
+      "aggregate_utility_delta": -1,
+      "declared_p": 250,
+      "deviators": [
+        {
+          "actual_gain_when_all_deviate": 0,
+          "actual_utility_when_all_deviate": 2,
+          "gain_survived": false,
+          "hospital": "h1",
+          "predicted_solo_gain": 1,
+          "truthful_utility": 2
+        },
+        {
+          "actual_gain_when_all_deviate": 0,
+          "actual_utility_when_all_deviate": 1,
+          "gain_survived": false,
+          "hospital": "h3",
+          "predicted_solo_gain": 2,
+          "truthful_utility": 1
+        },
+        {
+          "actual_gain_when_all_deviate": 1,
+          "actual_utility_when_all_deviate": 6,
+          "gain_survived": true,
+          "hospital": "h4",
+          "predicted_solo_gain": 1,
+          "truthful_utility": 5
+        },
+        {
+          "actual_gain_when_all_deviate": 0,
+          "actual_utility_when_all_deviate": 1,
+          "gain_survived": false,
+          "hospital": "h9",
+          "predicted_solo_gain": 1,
+          "truthful_utility": 1
+        },
+        {
+          "actual_gain_when_all_deviate": 0,
+          "actual_utility_when_all_deviate": 1,
+          "gain_survived": false,
+          "hospital": "h17",
+          "predicted_solo_gain": 1,
+          "truthful_utility": 1
+        },
+        {
+          "actual_gain_when_all_deviate": 0,
+          "actual_utility_when_all_deviate": 3,
+          "gain_survived": false,
+          "hospital": "h18",
+          "predicted_solo_gain": 1,
+          "truthful_utility": 3
+        },
+        {
+          "actual_gain_when_all_deviate": 0,
+          "actual_utility_when_all_deviate": 1,
+          "gain_survived": false,
+          "hospital": "h41",
+          "predicted_solo_gain": 1,
+          "truthful_utility": 1
+        }
+      ],
+      "joint_total_matched_pairs": 102,
+      "joint_total_utility": 102,
+      "n_simultaneous_deviators": 7,
+      "ownership_draw_index": 3,
+      "source_member": "Pansart2022/KEP_p250_n28_k3_l3_3.txt",
+      "truthful_total_matched_pairs": 103,
+      "truthful_total_utility": 103
+    },
+    {
+      "aggregate_matched_pairs_delta": -2,
+      "aggregate_utility_delta": -2,
+      "declared_p": 250,
+      "deviators": [
+        {
+          "actual_gain_when_all_deviate": 0,
+          "actual_utility_when_all_deviate": 1,
+          "gain_survived": false,
+          "hospital": "h4",
+          "predicted_solo_gain": 1,
+          "truthful_utility": 1
+        },
+        {
+          "actual_gain_when_all_deviate": 1,
+          "actual_utility_when_all_deviate": 3,
+          "gain_survived": true,
+          "hospital": "h7",
+          "predicted_solo_gain": 1,
+          "truthful_utility": 2
+        },
+        {
+          "actual_gain_when_all_deviate": 1,
+          "actual_utility_when_all_deviate": 3,
+          "gain_survived": true,
+          "hospital": "h9",
+          "predicted_solo_gain": 1,
+          "truthful_utility": 2
+        },
+        {
+          "actual_gain_when_all_deviate": 1,
+          "actual_utility_when_all_deviate": 2,
+          "gain_survived": true,
+          "hospital": "h10",
+          "predicted_solo_gain": 1,
+          "truthful_utility": 1
+        },
+        {
+          "actual_gain_when_all_deviate": 1,
+          "actual_utility_when_all_deviate": 3,
+          "gain_survived": true,
+          "hospital": "h13",
+          "predicted_solo_gain": 1,
+          "truthful_utility": 2
+        },
+        {
+          "actual_gain_when_all_deviate": 0,
+          "actual_utility_when_all_deviate": 2,
+          "gain_survived": false,
+          "hospital": "h14",
+          "predicted_solo_gain": 1,
+          "truthful_utility": 2
+        },
+        {
+          "actual_gain_when_all_deviate": -1,
+          "actual_utility_when_all_deviate": 1,
+          "gain_survived": false,
+          "hospital": "h20",
+          "predicted_solo_gain": 1,
+          "truthful_utility": 2
+        },
+        {
+          "actual_gain_when_all_deviate": 1,
+          "actual_utility_when_all_deviate": 3,
+          "gain_survived": true,
+          "hospital": "h21",
+          "predicted_solo_gain": 1,
+          "truthful_utility": 2
+        },
+        {
+          "actual_gain_when_all_deviate": 1,
+          "actual_utility_when_all_deviate": 2,
+          "gain_survived": true,
+          "hospital": "h36",
+          "predicted_solo_gain": 1,
+          "truthful_utility": 1
+        }
+      ],
+      "joint_total_matched_pairs": 101,
+      "joint_total_utility": 101,
+      "n_simultaneous_deviators": 9,
+      "ownership_draw_index": 6,
+      "source_member": "Pansart2022/KEP_p250_n28_k3_l3_3.txt",
+      "truthful_total_matched_pairs": 103,
+      "truthful_total_utility": 103
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+Dataset: UMass Amherst CS course-allocation survey data (Fall 2024)
+GitHub repo: https://github.com/Fair-and-Explainable-Decision-Making/course-allocation-data
+Pinned commit: 2c1143e1b737aafeebb751f6e2f9bf3815998beb
+  (this was the repo's HEAD commit on main at access time; files below were
+  fetched from raw.githubusercontent.com at this exact commit SHA, not from
+  a mutable "main" ref, so re-fetching these URLs later will reproduce the
+  same bytes even if the repo changes)
+Companion code repo (reference only, not downloaded):
+  https://github.com/Fair-and-Explainable-Decision-Making/yankee-swap-allocation-framework
+Accessed: 2026-09-04
+
+Files downloaded (raw.githubusercontent.com URLs at the pinned commit):
+
+  resources/survey_data.csv -> survey_data.csv
+    URL: https://raw.githubusercontent.com/Fair-and-Explainable-Decision-Making/course-allocation-data/2c1143e1b737aafeebb751f6e2f9bf3815998beb/resources/survey_data.csv
+    size: 274813 bytes (matches GitHub Contents API "size" field exactly)
+    sha256: e23be1f480c3446391d60d765ce7437518871facbc3d180faf60621df8a0a3fd
+
+  resources/random_survey.csv -> random_survey.csv
+    URL: https://raw.githubusercontent.com/Fair-and-Explainable-Decision-Making/course-allocation-data/2c1143e1b737aafeebb751f6e2f9bf3815998beb/resources/random_survey.csv
+    size: 8129 bytes
+    sha256: c92a099b2d89d4f558adc649a7dca3c3b68b7fc464e03edc3afd9d5edb56c60c
+
+  resources/survey_column_mapping.csv -> survey_column_mapping.csv
+    URL: https://raw.githubusercontent.com/Fair-and-Explainable-Decision-Making/course-allocation-data/2c1143e1b737aafeebb751f6e2f9bf3815998beb/resources/survey_column_mapping.csv
+    size: 17811 bytes
+    sha256: 4de63c7614046ca4d9ee27b6ad0a363d6a4132b0b90f41a0e7c8d02e15539a2f
+
+  resources/anonymized_courses.xlsx -> anonymized_courses.xlsx
+    URL: https://raw.githubusercontent.com/Fair-and-Explainable-Decision-Making/course-allocation-data/2c1143e1b737aafeebb751f6e2f9bf3815998beb/resources/anonymized_courses.xlsx
+    size: 13323 bytes
+    sha256: 4fc2f7df17472d2246be622c5e3cf6267d4eb2cd2322865048281aa46654ba2f
+
+  README.md -> REPO_README.md (the repo's own top-level README, saved
+    verbatim and renamed only to avoid colliding with this directory's own
+    files; it is the source of the "1,063 student responses" and "MIT
+    License" claims discussed in ../README.md)
+    URL: https://raw.githubusercontent.com/Fair-and-Explainable-Decision-Making/course-allocation-data/2c1143e1b737aafeebb751f6e2f9bf3815998beb/README.md
+    size: 6644 bytes
+    sha256: 177983a60082e597e5a0e0402b08a2511efc924db78ff0f922d4993b116c4eb2
+
+Verification performed at download time:
+  - Every downloaded file's byte size matched the size the GitHub Contents
+    API (https://api.github.com/repos/.../contents/resources) reports for
+    that file, exactly.
+
+License: No LICENSE file exists at the repository root (confirmed via
+  `GET /repos/.../license` -> 404, and `license` field is null in the repo's
+  own API metadata). However, REPO_README.md states explicitly, in its own
+  "License" section: "This project is open-source and available under the
+  MIT License." This is corroborated by pyproject.toml, which declares the
+  classifier "License :: OSI Approved :: MIT License". Treated as sufficient
+  confirmation of an MIT license per the task's permissive-license bar. See
+  ../README.md for the full discussion.
+
+anonymized_courses.xlsx is a binary spreadsheet (openpyxl required to parse;
+not a witness/ dependency — see parsed.py).
