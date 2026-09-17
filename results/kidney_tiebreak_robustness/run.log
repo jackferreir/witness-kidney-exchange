@@ -1,0 +1,154 @@
+[kidney_tiebreak_robustness] 0 witness(es) already done, will be skipped
+[kidney_tiebreak_robustness] 58 witness(es) loaded from 3 file(s)
+[kidney_tiebreak_robustness] processing ca2ea3709afa (K=3, P=250, hospital='h9') from results/kidney_k3_real_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> WEAK (16.007s)
+[kidney_tiebreak_robustness] processing 7f128c351d7b (K=3, P=250, hospital='h4') from results/kidney_k3_real_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> UNDETERMINED (37.961s)
+[kidney_tiebreak_robustness] processing a2d8c2d1564a (K=3, P=250, hospital='h2') from results/kidney_k3_real_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> WEAK (7.467s)
+[kidney_tiebreak_robustness] processing 0abbf6512302 (K=3, P=250, hospital='h4') from results/kidney_k3_real_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> WEAK (17.942s)
+[kidney_tiebreak_robustness] processing c46580c55176 (K=3, P=250, hospital='h7') from results/kidney_k3_real_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> WEAK (10.356s)
+[kidney_tiebreak_robustness] processing 08d891509718 (K=3, P=250, hospital='h4') from results/kidney_k3_real_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> WEAK (38.62s)
+[kidney_tiebreak_robustness] processing 78f4e8fa976f (K=3, P=250, hospital='h2') from results/kidney_k3_real_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> WEAK (25.612s)
+[kidney_tiebreak_robustness] processing 3404460dc7fc (K=3, P=250, hospital='h3') from results/kidney_k3_real_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> WEAK (12.213s)
+[kidney_tiebreak_robustness] processing c0826f8cd94a (K=3, P=250, hospital='h9') from results/kidney_k3_real_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> UNDETERMINED (23.95s)
+[kidney_tiebreak_robustness] processing e4b050e5631c (K=3, P=250, hospital='h1') from results/kidney_k3_real_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> UNDETERMINED (41.854s)
+[kidney_tiebreak_robustness] processing e3d7a66831cc (K=3, P=250, hospital='h7') from results/kidney_k3_real_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> WEAK (15.399s)
+[kidney_tiebreak_robustness] processing c149bfcf42fb (K=3, P=250, hospital='h9') from results/kidney_k3_real_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> WEAK (25.385s)
+[kidney_tiebreak_robustness] processing f5c89ac3a5e7 (K=3, P=250, hospital='h10') from results/kidney_k3_real_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> UNDETERMINED (11.498s)
+[kidney_tiebreak_robustness] processing beae13871088 (K=3, P=500, hospital='h1') from results/kidney_k3_real_p500_supplement/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> UNDETERMINED (131.209s)
+[kidney_tiebreak_robustness] processing 761499382df4 (K=3, P=500, hospital='h1') from results/kidney_k3_real_p500_supplement/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> UNDETERMINED (131.964s)
+[kidney_tiebreak_robustness] processing 96dae4a19f78 (K=3, P=500, hospital='h3') from results/kidney_k3_real_p500_supplement/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> UNDETERMINED (127.084s)
+[kidney_tiebreak_robustness] processing 9350e4f5d6d9 (K=3, P=500, hospital='h2') from results/kidney_k3_real_p500_supplement/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> UNDETERMINED (130.886s)
+[kidney_tiebreak_robustness] processing 757f07422c3c (K=3, P=500, hospital='h3') from results/kidney_k3_real_p500_supplement/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> UNDETERMINED (125.931s)
+[kidney_tiebreak_robustness] processing 7c323b1528bd (K=3, P=500, hospital='h2') from results/kidney_k3_real_p500_supplement/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> UNDETERMINED (130.812s)
+[kidney_tiebreak_robustness] processing 47b6da5d4320 (K=3, P=500, hospital='h1') from results/kidney_k3_real_p500_supplement/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> UNDETERMINED (240.821s)
+[kidney_tiebreak_robustness] processing 59ec1e4c1be9 (K=3, P=500, hospital='h2') from results/kidney_k3_real_p500_supplement/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> UNDETERMINED (129.599s)
+[kidney_tiebreak_robustness] processing 18f32954ca82 (K=3, P=500, hospital='h2') from results/kidney_k3_real_p500_supplement/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> UNDETERMINED (129.939s)
+[kidney_tiebreak_robustness] processing 4731f5a4d08c (K=3, P=500, hospital='h2') from results/kidney_k3_real_p500_supplement/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> UNDETERMINED (134.234s)
+[kidney_tiebreak_robustness] processing 2c3b50dae16a (K=3, P=500, hospital='h3') from results/kidney_k3_real_p500_supplement/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> UNDETERMINED (126.752s)
+[kidney_tiebreak_robustness] processing 220b786554aa (K=2, P=250, hospital='h4') from results/kidney_real_data_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> WEAK (0.024s)
+[kidney_tiebreak_robustness] processing ad137ca633d3 (K=2, P=250, hospital='h6') from results/kidney_real_data_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> WEAK (0.033s)
+[kidney_tiebreak_robustness] processing 18522f3df677 (K=2, P=250, hospital='h12') from results/kidney_real_data_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> WEAK (0.042s)
+[kidney_tiebreak_robustness] processing e8c770ec8c98 (K=2, P=250, hospital='h5') from results/kidney_real_data_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> WEAK (0.023s)
+[kidney_tiebreak_robustness] processing 700fef209b88 (K=2, P=500, hospital='h4') from results/kidney_real_data_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> WEAK (0.16s)
+[kidney_tiebreak_robustness] processing 93762aafa1cf (K=2, P=750, hospital='h6') from results/kidney_real_data_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> WEAK (0.479s)
+[kidney_tiebreak_robustness] processing 2e5ce9767d15 (K=2, P=750, hospital='h5') from results/kidney_real_data_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> WEAK (0.332s)
+[kidney_tiebreak_robustness] processing 80adbd820d94 (K=3, P=50, hospital='h4') from results/kidney_k3_real_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> WEAK (0.007s)
+[kidney_tiebreak_robustness] processing 9d8ebb9f1d9f (K=3, P=50, hospital='h8') from results/kidney_k3_real_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> WEAK (0.015s)
+[kidney_tiebreak_robustness] processing 3a5fbe25120e (K=3, P=50, hospital='h3') from results/kidney_k3_real_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> WEAK (0.052s)
+[kidney_tiebreak_robustness] processing ff158a788d0e (K=3, P=50, hospital='h5') from results/kidney_k3_real_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> STRONG_ROBUST (0.017s)
+[kidney_tiebreak_robustness] processing 93717e945893 (K=3, P=50, hospital='h6') from results/kidney_k3_real_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> WEAK (0.032s)
+[kidney_tiebreak_robustness] processing 168065d42d06 (K=3, P=50, hospital='h7') from results/kidney_k3_real_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> WEAK (0.034s)
+[kidney_tiebreak_robustness] processing 9d67a6f7ac14 (K=3, P=50, hospital='h1') from results/kidney_k3_real_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> STRONG_ROBUST (0.034s)
+[kidney_tiebreak_robustness] processing cc56058af04f (K=3, P=50, hospital='h2') from results/kidney_k3_real_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> WEAK (0.008s)
+[kidney_tiebreak_robustness] processing 205d9fc9e1e3 (K=3, P=50, hospital='h7') from results/kidney_k3_real_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> STRONG_ROBUST (0.008s)
+[kidney_tiebreak_robustness] processing 745e0ea799ee (K=3, P=50, hospital='h8') from results/kidney_k3_real_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> WEAK (0.007s)
+[kidney_tiebreak_robustness] processing 2dfb0e28934e (K=3, P=100, hospital='h11') from results/kidney_k3_real_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> WEAK (0.187s)
+[kidney_tiebreak_robustness] processing 4c51a09c8686 (K=3, P=100, hospital='h15') from results/kidney_k3_real_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> WEAK (0.078s)
+[kidney_tiebreak_robustness] processing 0e5b093d745e (K=3, P=100, hospital='h6') from results/kidney_k3_real_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> STRONG_ROBUST (0.048s)
+[kidney_tiebreak_robustness] processing 5ac93bbb92a8 (K=3, P=100, hospital='h2') from results/kidney_k3_real_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> WEAK (0.069s)
+[kidney_tiebreak_robustness] processing e6bb6305b9f7 (K=3, P=100, hospital='h4') from results/kidney_k3_real_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> WEAK (0.044s)
+[kidney_tiebreak_robustness] processing c019fa1864b6 (K=3, P=100, hospital='h13') from results/kidney_k3_real_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> WEAK (0.187s)
+[kidney_tiebreak_robustness] processing 0b986b9fd19e (K=2, P=50, hospital='h4') from results/kidney_real_data_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> WEAK (0.006s)
+[kidney_tiebreak_robustness] processing 741dd3cb745f (K=2, P=50, hospital='h7') from results/kidney_real_data_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> WEAK (0.01s)
+[kidney_tiebreak_robustness] processing 31be44c4ae37 (K=2, P=50, hospital='h8') from results/kidney_real_data_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> WEAK (0.006s)
+[kidney_tiebreak_robustness] processing 1d4d04a8c410 (K=2, P=50, hospital='h1') from results/kidney_real_data_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> WEAK (0.007s)
+[kidney_tiebreak_robustness] processing 1f85dcb2529d (K=2, P=50, hospital='h2') from results/kidney_real_data_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> WEAK (0.003s)
+[kidney_tiebreak_robustness] processing 556e04de3948 (K=2, P=50, hospital='h6') from results/kidney_real_data_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> WEAK (0.002s)
+[kidney_tiebreak_robustness] processing f2d258cb758f (K=2, P=50, hospital='h8') from results/kidney_real_data_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> WEAK (0.007s)
+[kidney_tiebreak_robustness] processing ce5521036f2e (K=2, P=50, hospital='h4') from results/kidney_real_data_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> WEAK (0.003s)
+[kidney_tiebreak_robustness] processing 697da1d5e9c7 (K=2, P=100, hospital='h3') from results/kidney_real_data_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> WEAK (0.008s)
+[kidney_tiebreak_robustness] processing 9ce749fcb781 (K=2, P=100, hospital='h3') from results/kidney_real_data_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> WEAK (0.005s)
+[kidney_tiebreak_robustness] processing 1f274d9dd490 (K=2, P=100, hospital='h13') from results/kidney_real_data_sweep_v2/witnesses.jsonl
+[kidney_tiebreak_robustness]   -> WEAK (0.005s)
+{
+  "by_K_P_bucket": {
+    "K2_P100": {
+      "WEAK": 3
+    },
+    "K2_P250": {
+      "WEAK": 4
+    },
+    "K2_P50": {
+      "WEAK": 8
+    },
+    "K2_P500": {
+      "WEAK": 1
+    },
+    "K2_P750": {
+      "WEAK": 2
+    },
+    "K3_P100": {
+      "STRONG_ROBUST": 1,
+      "WEAK": 5
+    },
+    "K3_P250": {
+      "UNDETERMINED": 4,
+      "WEAK": 9
+    },
+    "K3_P50": {
+      "STRONG_ROBUST": 3,
+      "WEAK": 7
+    },
+    "K3_P500": {
+      "UNDETERMINED": 11
+    }
+  },
+  "flagged_witness_ids": [],
+  "total_processed": 58
+}

@@ -1,0 +1,36 @@
+{
+  "by_K_P_bucket": {
+    "K2_P100": {
+      "WEAK": 3
+    },
+    "K2_P250": {
+      "WEAK": 4
+    },
+    "K2_P50": {
+      "WEAK": 8
+    },
+    "K2_P500": {
+      "WEAK": 1
+    },
+    "K2_P750": {
+      "WEAK": 2
+    },
+    "K3_P100": {
+      "STRONG_ROBUST": 1,
+      "WEAK": 5
+    },
+    "K3_P250": {
+      "UNDETERMINED": 4,
+      "WEAK": 9
+    },
+    "K3_P50": {
+      "STRONG_ROBUST": 3,
+      "WEAK": 7
+    },
+    "K3_P500": {
+      "UNDETERMINED": 11
+    }
+  },
+  "flagged_witness_ids": [],
+  "total_processed": 58
+}
