@@ -42,9 +42,34 @@ only the maximum cycle length the central clearing may use:
 | 250 patients | 1.3% | **8.7%** |
 | 500 patients | 0.9% | **24.4%** |
 
-Pooled at P >= 250: 1.2% (5/405) vs 12.3% (24/195), one-sided Fisher exact
-p ~= 1.6e-8. At P = 50-100 the two are statistically indistinguishable
-(p = 0.41 and p = 0.25).
+Pooled at P >= 250: 1.2% (5/405) vs 12.3% (24/195) — a difference of +11.1
+percentage points.
+
+**On the statistics, stated carefully.** A naive Fisher exact test on those
+counts returns p ~= 1.6e-8, and an earlier version of this README reported
+that figure. It is overstated, because it treats every hospital-check as an
+independent observation. They are not: there are only ~15 distinct REAL
+compatibility graphs per pool size (see `witness/kidney_real_data.py`), and
+the large check counts come from re-partitioning those same graphs into
+hospitals many times over. Hospitals drawn from one graph share its
+compatibility structure, so the observations are CLUSTERED, and clustering
+inflates naive significance. Re-analysed clustering on the source graph
+(`scripts/clustered_inference.py`):
+
+- cluster bootstrap over graphs, 95% CI on the difference: **[+4.8, +18.5]
+  percentage points** — excludes zero
+- one-sided bootstrap p (that 3-cycles are NOT higher): **p ~= 1e-4**
+- exact sign test, graph as the unit of analysis: **14 of 17 graphs** show
+  the 3-cycle rate higher, **p = 0.013**
+
+The finding survives; the certainty does not. Note also a hard ceiling: with
+~15 graphs per pool size, a sign test cannot return a p-value below about
+6e-5 even if every graph agrees, so no amount of additional re-partitioning
+can push these numbers lower. The effective sample size is the number of
+graphs, not the number of hospital-checks.
+
+At P = 50-100 the two cycle lengths are statistically indistinguishable
+under either analysis.
 
 Raw counts: 2-cycles from `results/kidney_real_data_sweep_v2/summary.json`
 (4/300 at P=250, 1/105 at P=500); 3-cycles from
