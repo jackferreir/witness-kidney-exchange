@@ -224,25 +224,51 @@ being large relative to the exchange, which is not the regime national
 programs operate in. Reported as a small-market observation, not a general
 one.
 
-#### Why the k=2 / k≥3 boundary may not be a coincidence
+#### Claim A is proved at k=2, and the proof explains the boundary
 
-It is exactly where the matroid structure of the clearing problem fails —
-the same boundary at which Ashlagi & Roth (2014) show the cost of
-individual rationality goes from free (k=2, where maximum matchings form a
-matroid) to worst-case 1/(k−1). Three properties in this repo break at that
-same k: the withholding rate jumps, IR's efficiency cost goes from exactly
-zero to positive, and Claim A fails.
+**Claim.** At two-way exchange, no misreport gives a hospital `h` more than
+`U_true_max`.
 
-Claim A is **not proved**. At k=2 the central clearing is maximum matching,
-where Gallai–Edmonds gives the essential/inessential dichotomy a proof would
-presumably be built from; we could not close the argument. We checked
-Ashlagi & Roth (2014) in full (both the 2011 NBER working paper and the
-2013 pre-publication draft): it contains no tie-breaking analysis, no
-Gallai–Edmonds, and no bound of this form. Its Proposition 8.1 — credited to
-an unpublished 2007 Roth–Sönmez–Ünver note — uses a two-hospital graph with
-multiple maximum matchings where the withholding gain equals what the other
-tied optimum would have given, which is the same phenomenon, deployed to
-prove a different (and stronger) three-way impossibility.
+**Proof.** Let `R ⊆ V_h` be any report `h` submits, `M` a maximum matching
+the center returns over the reported pool, and `L` the local matching `h`
+forms afterward on its own true pairs left unmatched. `M` and `L` are
+vertex-disjoint by construction (`L` only ever touches pairs `M` didn't
+reach) and every edge in both is a real edge of the truthful compatibility
+graph, so `N := M ∪ L` is a matching **in the full truthful graph**, and
+`|V(N) ∩ V_h|` is exactly `h`'s realized payoff from misreporting.
+
+`V(N) ∩ V_h` is therefore a *matchable* set. Matchable vertex sets of a
+graph are the independent sets of the **matching matroid**, whose bases are
+exactly the vertex sets of maximum matchings. By matroid augmentation,
+`V(N) ∩ V_h` extends to a basis — i.e. there is a maximum matching `M*` of
+the truthful graph with `V(M*) ⊇ V(N) ∩ V_h`. Hence
+
+    h's payoff from R  ≤  |V(M*) ∩ V_h|  ≤  U_true_max.  ∎
+
+This is also exactly why it fails at k≥3: sets packable by cycles of length
+up to 3 do **not** form a matroid, so the augmentation step is unavailable.
+It is the same matroid fact Ashlagi & Roth (2014) cite for k=2 (their
+`k-efficient = k-maximal` equivalence) and the same boundary at which they
+show the cost of individual rationality goes from free to worst-case
+1/(k−1). Three properties in this repo break at that one k: the withholding
+rate jumps, IR's efficiency cost goes from exactly zero to positive, and
+this claim stops holding.
+
+**Verified independently of the proof**, by exhaustive search over every
+misreport against every tied optimum: 0 of 26,584 verified K=2
+manipulations exceed `U_true_max` (87% land exactly on it); 188 of 1,362
+K=3 manipulations do. The proof was also checked computationally — the
+matroid-augmentation lemma against 20,000 random (graph, vertex-set) pairs,
+and the full claim end-to-end (every misreport × every optimal tie-break)
+against 3,000 random instances — with zero violations either way.
+
+We checked Ashlagi & Roth (2014) in full (both the 2011 NBER working paper
+and the 2013 pre-publication draft) and could not find this statement. Its
+Proposition 8.1 — credited to an unpublished 2007 Roth–Sönmez–Ünver note —
+uses a two-hospital graph with multiple maximum matchings where the
+withholding gain equals what the other tied optimum would have given,
+which is the same phenomenon, deployed to prove a different (and
+stronger) three-way impossibility; it does not isolate this bound.
 
 Reproduce the cycle-length and determinacy analyses with
 `python3 scripts/samesolver_and_determinacy.py`.
