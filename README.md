@@ -27,11 +27,7 @@ programs run. It is explicitly **not** the individually-rational or
 incentive-aligned mechanism that Ashlagi and Roth (2014) construct, and
 results here say nothing about how that designed mechanism behaves. An
 individually-rational-for-hospitals variant HAS since been built and tested
-(`witness/kidney_ir.py`): imposing IR costs 0.031% of transplants across
-2,751 instances and is never infeasible on truthful profiles, but whether it
-reduces the withholding rate is NOT established — the graph-level sign test
-is null (6/12 graphs at P=250), so the point estimates should not be read as
-a demonstrated effect.
+(`witness/kidney_ir.py`) — see "Does individual rationality fix it?" below.
 
 ## What we found
 
@@ -134,46 +130,172 @@ of 4, eight different CP-SAT random seeds returned the *identical*
 selection. The variation appears across *implementations* (ILP vs Blossom),
 not across runs of one implementation.
 
-### The sharpest result: determinacy appears to imply strategyproofness at K=2
+### The sharpest result: at 2-cycles, lying never beats honest-plus-lucky
 
-For every outcome-blind hospital the census records two things: the full
-range of its outcome across ALL maximum-cardinality clearings
-(`tiebreak_spread`), and its best achievable misreport gain from exhaustive
-search (`strategic_gain`). That permits a conditional we could not find
-reported anywhere:
+For every outcome-blind hospital the census records the full range of its
+outcome across ALL maximum-cardinality clearings (`u_true_min` /
+`u_true_max`) alongside its best achievable misreport gain from exhaustive
+search. That permits a question sharper than "can a hospital gain?":
+**when it gains, where does the gain come from?**
 
-| cycle length | determinate hospitals (spread = 0) | of those, manipulable |
+Write `U_true_max` for a hospital's best outcome under truthful reporting
+over every maximum-cardinality clearing — its luckiest honest tie-break.
+Comparing each confirmed manipulation's payoff against it:
+
+| cycle length | verified manipulations | payoff exceeds `U_true_max` |
 |---|---|---|
-| **K = 2** | **2,434** | **0** |
-| **K = 3** | 1,557 | 11 (0.71%), every one gaining exactly 1 |
+| **K = 2** | **26,584** | **0 (0.00%)** |
+| **K = 3** | 1,362 | **188 (13.8%)** |
 
-Across 2,434 two-way-exchange hospitals whose outcome was identical under
-every optimal clearing, **not one had a profitable misreport**. The 95%
-upper bound on the true rate is 0.12%. For contrast, among *indeterminate*
-hospitals the manipulation rate is 4.39% (K=2) and 6.13% (K=3) — a risk
-ratio of ~19x pooled, clustered over 41 graphs at +4.97 pp,
-95% CI [+3.67, +6.48], sign test **38 of 39 graphs**, p at the resolution
-floor.
+At two-way exchange, across 26,584 verified manipulations, **not one beat
+what honest reporting could have achieved under a favorable tie-break** —
+and 87% landed exactly on it. The 95% upper bound on the true rate is
+0.011%. At three-way that fails: 188 hospitals end with strictly more than
+any honest clearing could ever have given them.
 
-The eleven K=3 exceptions are spread across 9 distinct source graphs (not
-one pathological instance), all gain exactly 1, and none occur at hospitals
-with zero baseline utility.
+Stated as the conjecture (call it **Claim A**):
 
-**Why this may not be a coincidence.** The K=2 / K=3 boundary is exactly
-where the matroid structure of the clearing problem fails — the same
-boundary at which Ashlagi & Roth (2014) show the cost of individual
-rationality goes from free (k=2, where maximum matchings form a matroid) to
-worst-case 1/(k-1) (k>=3). Two separate properties break at the same place.
+> At k=2, a hospital's payoff from withholding never exceeds `U_true_max`.
 
-Stated as the open question rather than a result: **is determinacy
-sufficient for strategyproofness in this class of mechanisms — provably so
-at k=2, and approximately so at k=3?** If a hospital's outcome is identical
-under every maximum-cardinality clearing, can it ever gain by lying? The
-data says essentially never at k=2 and rarely-and-minimally at k=3. Whether
-that is a theorem is not something measurement can settle.
+The interpretation is structural, not quantitative. At 2-cycles the whole
+withholding incentive lives **inside tie-breaking indeterminacy** — a
+hospital can only recover what a luckier tie-break would have handed it
+anyway, never manufacture value. At 3-cycles withholding becomes
+*creative*: it produces outcomes no truthful clearing could. The difference
+between k=2 and k=3 is one of **kind**, not of magnitude.
 
-Reproduce both analyses in this section with
+#### Determinacy is a corollary, not a separate finding
+
+Call a hospital **determinate** if its matched count is identical under
+every maximum-cardinality clearing (`tiebreak_spread == 0`). Claim A
+implies determinate hospitals cannot gain, in two lines: determinacy means
+`u_min = u_max = u`, the realized honest payoff is therefore exactly `u`,
+and Claim A caps any misreport at `U_true_max = u`, so the gain is ≤ 0.
+
+The data agrees. Excluding hospitals already matching all their own pairs
+(which cannot gain for trivial reasons):
+
+| | determinate hospitals with room to gain | manipulable |
+|---|---|---|
+| real benchmark (K=2) | 7,550 | **0** |
+| synthetic, four parameter settings (K=2) | 187,573 | **0** |
+| **total** | **195,123** | **0** |
+
+95% upper bound, clustered on graph: ~0.003%. And all 165 determinate K=3
+manipulations fall inside the "exceeds `U_true_max`" class, exactly as the
+logic requires.
+
+The controlled version holds the graphs fixed and varies only cycle
+length — identical markets, identical hospitals, identical solver:
+
+| | determinate with room to gain | manipulable |
+|---|---|---|
+| K = 2 | 1,003 | **0** |
+| K = 3 | 367 | **17 (4.6%)** |
+
+All 17 pass independent subprocess replay.
+
+#### Nearly every manipulation is tie-break-dependent
+
+Running the exact joint-ILP check (`scripts/kidney_tiebreak_exact.py`) over
+119 unique K=3 witnesses asks whether a manipulation survives an
+*adversarial* tie-break on both sides (`U_false_min > U_true_max`) — i.e.
+whether **no** selection rule over maximum-cardinality clearings could
+deter it:
+
+| pool size | resolved | survives any tie-break | tie-break-dependent |
+|---|---|---|---|
+| P = 50 | 22 | 7 | 15 |
+| P = 100 | 20 | 3 | 17 |
+| **P = 250** | 67 | **0** | 67 |
+| P = 500 | 0 | — | — (all 9 timed out) |
+
+The ten flagged rows are **6 distinct underlying cases** (four were
+independently rediscovered by two separate collection pipelines, with
+identical numbers — a cross-validation, not extra evidence). Each was
+re-verified by a from-scratch CP-SAT reimplementation sharing no code with
+the checker; all six agreed exactly. Each withholds exactly one pair.
+
+**These exist only in small pools.** Zero survive at P=250 out of 67
+resolved, and P=500 is uninformative (every case exceeded the solve
+budget). The hospitals involved own 6–7 of 50 pairs — roughly 13% of the
+entire market, versus ~2.4% at P=250 — so this plausibly reflects hospitals
+being large relative to the exchange, which is not the regime national
+programs operate in. Reported as a small-market observation, not a general
+one.
+
+#### Why the k=2 / k≥3 boundary may not be a coincidence
+
+It is exactly where the matroid structure of the clearing problem fails —
+the same boundary at which Ashlagi & Roth (2014) show the cost of
+individual rationality goes from free (k=2, where maximum matchings form a
+matroid) to worst-case 1/(k−1). Three properties in this repo break at that
+same k: the withholding rate jumps, IR's efficiency cost goes from exactly
+zero to positive, and Claim A fails.
+
+Claim A is **not proved**. At k=2 the central clearing is maximum matching,
+where Gallai–Edmonds gives the essential/inessential dichotomy a proof would
+presumably be built from; we could not close the argument. We checked
+Ashlagi & Roth (2014) in full (both the 2011 NBER working paper and the
+2013 pre-publication draft): it contains no tie-breaking analysis, no
+Gallai–Edmonds, and no bound of this form. Its Proposition 8.1 — credited to
+an unpublished 2007 Roth–Sönmez–Ünver note — uses a two-hospital graph with
+multiple maximum matchings where the withholding gain equals what the other
+tied optimum would have given, which is the same phenomenon, deployed to
+prove a different (and stronger) three-way impossibility.
+
+Reproduce the cycle-length and determinacy analyses with
 `python3 scripts/samesolver_and_determinacy.py`.
+
+### Does individual rationality fix it?
+
+The standard proposed remedy is to require the clearing to give every
+hospital at least what it could match internally on its own. That variant
+is implemented as a single joint CP-SAT model in `witness/kidney_ir.py` —
+the IR constraint is imposed *during* optimization, never as a post-hoc
+repair.
+
+**Imposing IR costs almost nothing in transplants**, and the cost splits at
+exactly the k=2 / k≥3 boundary:
+
+| | instances | transplants (plain → IR) | loss |
+|---|---|---|---|
+| K = 2 | 645 | 11,092 → 11,092 | **exactly 0** |
+| K = 3 | 2,106 | 124,964 → 124,922 | 42 (**0.034%**) |
+
+IR was **never infeasible** across all 2,751 instances. The exact zero at
+k=2 is what matroid structure predicts (Ashlagi & Roth 2014), reproduced
+here independently. The k=3 figure is worth contrasting with the
+**worst-case** bound of 1/(k−1) = 50%: on real compatibility structure the
+typical cost is roughly three orders of magnitude below the worst case.
+
+**But IR does not eliminate the withholding incentive.** A paired design
+(`scripts/kidney_ir_paired.py`) runs both mechanisms on the *same* market
+and hospital, counting a case only when both arms resolve, which removes
+the differential-attrition confound that invalidated an earlier unpaired
+comparison at P=500:
+
+| P = 250, K = 3 | rate |
+|---|---|
+| plain mechanism | 31 / 288 = 10.8% |
+| IR mechanism | 11 / 288 = **3.8%** |
+
+IR removes the deviation in 27 discordant cases (McNemar exact
+p = 0.0008) — a real and substantial reduction. It does **not** remove it
+everywhere: 11 hospitals retain a profitable withholding deviation under
+IR, consistent with 41 confirmed IR-mechanism manipulations (1.5% of 2,742
+checks) in the separate unpaired sweep.
+
+More pointedly, **7 of the 288 cases can manipulate under IR but could
+not under the plain mechanism** — IR does not merely under-deliver, it can
+*introduce* withholding opportunities. The structural reason is visible in
+the mechanism: the IR floor is computed from what a hospital *reports*, so
+withholding lowers a hospital's own floor, and the constraint cannot see
+the pairs held back. IR protects a hospital relative to what it discloses,
+which is not the same as what it has.
+
+This run is **in progress** (288 of a planned 1,440 paired checks); the
+direction and significance are established, the point estimates will move.
 
 ## What is real and what is synthetic
 
