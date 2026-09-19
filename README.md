@@ -25,89 +25,155 @@ max-cardinality rule** — central clearing over reported pairs, then
 residual local clearing per hospital — which is close to what deployed
 programs run. It is explicitly **not** the individually-rational or
 incentive-aligned mechanism that Ashlagi and Roth (2014) construct, and
-results here say nothing about how that designed mechanism behaves. Testing
-an individually-rational-for-hospitals variant is the obvious next step and
-is not yet done.
+results here say nothing about how that designed mechanism behaves. An
+individually-rational-for-hospitals variant HAS since been built and tested
+(`witness/kidney_ir.py`): imposing IR costs 0.031% of transplants across
+2,751 instances and is never infeasible on truthful profiles, but whether it
+reduces the withholding rate is NOT established — the graph-level sign test
+is null (6/12 graphs at P=250), so the point estimates should not be read as
+a demonstrated effect.
 
 ## What we found
 
-On the *same* real compatibility graphs (Pansart et al. 2022 benchmark,
-MIT-licensed, included under `data/external/pansart2022_kep/`), changing
-only the maximum cycle length the central clearing may use:
+### Headline: with the solver held fixed, 3-cycles raise the withholding rate
 
-| Pool size | 2-cycles only | 3-cycles allowed |
+The cleanest comparison in this repo holds the clearing *solver* constant
+and varies only the maximum cycle length. Both arms use the exact-ILP
+policy, the same ownership seed, the same experimental design; only K
+differs (`scripts/kidney_tiebreak_census.py` hardcodes the ILP policy for
+both cycle lengths, which is what makes the comparison solver-clean):
+
+| | rate at P = 250 |
+|---|---|
+| 2-cycles (ILP) | 2.17% (26 / 1200) |
+| 3-cycles (ILP) | 8.73% (80 / 916) |
+| **difference** | **+6.57 pp** |
+
+Clustered on the source graph — the only honest unit, since there are only
+~15 distinct real compatibility graphs per pool size and the large row
+counts come from re-partitioning those same graphs:
+
+- cluster bootstrap 95% CI: **[+2.96, +11.63] pp** — excludes zero
+- exact sign test, graph as unit: **13 of 15 graphs**, p = **0.0074**
+
+The same census finds **no effect at P = 50 (−0.25 pp) or P = 100 (+0.08
+pp)**. The divergence is a large-market phenomenon, which is the direction
+that matters and the opposite of what a small-sample artifact would produce.
+
+### A superseded earlier headline, and why it was retired
+
+An earlier version of this README reported **1.2% vs 12.3%** pooled at
+P >= 250, with a naive Fisher exact p ≈ 1.6e-8. That comparison is retired.
+Three defects, all found by adversarial review of this repo's own data:
+
+1. **It mixed solvers.** The 2-cycle arm ran Blossom, the 3-cycle arm ran
+   the ILP. Separately in this project, swapping tiebreak policy on
+   identical markets changed which hospitals could manipulate (0/135 vs
+   4/135, *zero overlap*), so a solver difference is not innocuous.
+2. **It mixed ownership seeds** across its three constituent runs.
+3. **Its significance leaned on a 45-check run** seeded `smoke-cap-test`.
+   Dropping P=500, the sign test falls to 6/8, p = 0.29.
+
+The naive p-value was also overstated on its own terms: it treated every
+hospital-check as independent when the checks come from ~15 graphs.
+Clustered, that comparison gives CI [+4.8, +18.5] pp and p ≈ 1e-4 — still
+real, but four orders of magnitude less certain than first claimed. It is
+superseded here by the solver-clean comparison above rather than repaired.
+
+There is a hard ceiling worth stating: with ~15 graphs per pool size, an
+exact sign test cannot return a p-value below about 6e-5 no matter how
+large the effect. The effective sample size is the number of graphs, not
+the number of hospital-checks.
+
+### Retracted: "manipulation gain is always exactly 1"
+
+Earlier drafts claimed every confirmed manipulation gained exactly one
+transplant. That is false. Across all census data (`strategic_gain` field):
+
+| gain | count |
+|---|---|
+| 0 | 6,700 |
+| 1 | 181 |
+| 2 | 11 |
+| 3 | 1 |
+
+All twelve gain>1 cases pass independent subprocess replay. The false claim
+came from an earlier analysis built on a *first-hit* manipulation search,
+which stops at the first profitable report rather than the best one; the
+census uses max-gain search. Any argument resting on a gain bound of 1 —
+including the conjecture previously stated in `MODEL.md` — is unsupported.
+
+### Tie-breaking indeterminacy is widespread, but the magnitude claim did not survive
+
+When several clearings tie for maximum cardinality, which one the mechanism
+returns is not specified by the theory, by policy, or by the software. We
+measured, per hospital and outcome-blind, the full range of its outcome
+across all tied optimal clearings (`tiebreak_spread`) alongside its best
+achievable misreport gain (`strategic_gain`).
+
+**What survives** is a prevalence claim, which does not depend on comparing
+magnitudes:
+
+| | tiebreak-sensitive | any strategic option |
 |---|---|---|
-| 50 patients | 2.7% | 3.3% |
-| 100 patients | 1.0% | 2.0% |
-| 250 patients | 1.3% | **8.7%** |
-| 500 patients | 0.9% | **24.4%** |
+| pooled (n = 6,908) | **50.7%** | **2.8%** |
+| K=2, P=250 | 73.7% | 2.2% |
+| K=3, P=250 | 81.9% | 8.8% |
 
-Pooled at P >= 250: 1.2% (5/405) vs 12.3% (24/195) — a difference of +11.1
-percentage points.
+**What did not survive**: an earlier framing claimed the tiebreak effect was
+~25x larger than the strategic effect. That ratio was inflated three ways —
+it compared a range over *all* mathematically tied clearings against a gain
+measured under *one* fixed rule; the realizable set is narrower than the
+mathematical one; and the ratio was carried by the ~97% of hospitals with
+zero gain. Restricted to hospitals that actually have a strategic option,
+the two are comparable (1.69 vs 1.07), not 25x apart.
 
-**On the statistics, stated carefully.** A naive Fisher exact test on those
-counts returns p ~= 1.6e-8, and an earlier version of this README reported
-that figure. It is overstated, because it treats every hospital-check as an
-independent observation. They are not: there are only ~15 distinct REAL
-compatibility graphs per pool size (see `witness/kidney_real_data.py`), and
-the large check counts come from re-partitioning those same graphs into
-hospitals many times over. Hospitals drawn from one graph share its
-compatibility structure, so the observations are CLUSTERED, and clustering
-inflates naive significance. Re-analysed clustering on the source graph
-(`scripts/clustered_inference.py`):
+A direct test also showed the indeterminacy is **not** realized by re-running
+one solver: on an instance with 760 candidate cycles and a confirmed spread
+of 4, eight different CP-SAT random seeds returned the *identical*
+selection. The variation appears across *implementations* (ILP vs Blossom),
+not across runs of one implementation.
 
-- cluster bootstrap over graphs, 95% CI on the difference: **[+4.8, +18.5]
-  percentage points** — excludes zero
-- one-sided bootstrap p (that 3-cycles are NOT higher): **p ~= 1e-4**
-- exact sign test, graph as the unit of analysis: **14 of 17 graphs** show
-  the 3-cycle rate higher, **p = 0.013**
+### The sharpest result: determinacy appears to imply strategyproofness at K=2
 
-The finding survives; the certainty does not. Note also a hard ceiling: with
-~15 graphs per pool size, a sign test cannot return a p-value below about
-6e-5 even if every graph agrees, so no amount of additional re-partitioning
-can push these numbers lower. The effective sample size is the number of
-graphs, not the number of hospital-checks.
+For every outcome-blind hospital the census records two things: the full
+range of its outcome across ALL maximum-cardinality clearings
+(`tiebreak_spread`), and its best achievable misreport gain from exhaustive
+search (`strategic_gain`). That permits a conditional we could not find
+reported anywhere:
 
-At P = 50-100 the two cycle lengths are statistically indistinguishable
-under either analysis.
+| cycle length | determinate hospitals (spread = 0) | of those, manipulable |
+|---|---|---|
+| **K = 2** | **2,434** | **0** |
+| **K = 3** | 1,557 | 11 (0.71%), every one gaining exactly 1 |
 
-Raw counts: 2-cycles from `results/kidney_real_data_sweep_v2/summary.json`
-(4/300 at P=250, 1/105 at P=500); 3-cycles from
-`results/kidney_k3_real_sweep_v2/summary.json` (13/150 at P=250) plus
-`results/kidney_k3_real_p500_supplement/summary.json` (11/45 at P=500, run
-separately due to per-instance solve time at that size).
+Across 2,434 two-way-exchange hospitals whose outcome was identical under
+every optimal clearing, **not one had a profitable misreport**. The 95%
+upper bound on the true rate is 0.12%. For contrast, among *indeterminate*
+hospitals the manipulation rate is 4.39% (K=2) and 6.13% (K=3) — a risk
+ratio of ~19x pooled, clustered over 41 graphs at +4.97 pp,
+95% CI [+3.67, +6.48], sign test **38 of 39 graphs**, p at the resolution
+floor.
 
-A follow-up full census (every hospital checked per market rather than one
-sampled hospital per market, closing an undercounting gap found partway
-through the project — `results/kidney_census_p250/summary.json`) gives
-15.2% at 250 patients under 3-cycles.
+The eleven K=3 exceptions are spread across 9 distinct source graphs (not
+one pathological instance), all gain exactly 1, and none occur at hospitals
+with zero baseline utility.
 
-### Important caveat: tiebreak dependence is unresolved at the sizes that matter
+**Why this may not be a coincidence.** The K=2 / K=3 boundary is exactly
+where the matroid structure of the clearing problem fails — the same
+boundary at which Ashlagi & Roth (2014) show the cost of individual
+rationality goes from free (k=2, where maximum matchings form a matroid) to
+worst-case 1/(k-1) (k>=3). Two separate properties break at the same place.
 
-When several clearings tie for maximum cardinality, the mechanism selects
-one deterministically (declared, seeded rule). The rates above are
-therefore properties of *that* rule. We tested separately whether each
-confirmed manipulation still pays under **every** tied maximum-cardinality
-clearing (`scripts/kidney_tiebreak_robustness.py`, validated in
-`tests/test_kidney_tiebreak_robustness.py` against an independent
-brute-force enumeration on 120 random markets):
+Stated as the open question rather than a result: **is determinacy
+sufficient for strategyproofness in this class of mechanisms — provably so
+at k=2, and approximately so at k=3?** If a hospital's outcome is identical
+under every maximum-cardinality clearing, can it ever gain by lying? The
+data says essentially never at k=2 and rarely-and-minimally at k=3. Whether
+that is a theorem is not something measurement can settle.
 
-| K | Pool | robust under all tiebreaks | profitable under some only | undetermined |
-|---|---|---|---|---|
-| 2 | 50-750 | 0 | 18 | 0 |
-| 3 | 50 | 3 | 7 | 0 |
-| 3 | 100 | 1 | 5 | 0 |
-| 3 | 250 | 0 | 9 | 4 |
-| 3 | 500 | 0 | 0 | 11 |
-
-**At P >= 250 — the sizes carrying the headline result — no manipulation
-has been shown robust to arbitrary tiebreaking.** They are profitable under
-some maximum-cardinality clearings and not others, and every P=500 case is
-undetermined because the feasibility solve exceeded the 60s cap (undetermined
-means unmeasured, never counted either way). The measured rates stand as
-statements about this deterministic rule; they are **not** established as
-invariant to which optimal clearing is selected. Raw per-witness output:
-`results/kidney_tiebreak_robustness/per_witness.jsonl`.
+Reproduce both analyses in this section with
+`python3 scripts/samesolver_and_determinacy.py`.
 
 ## What is real and what is synthetic
 
