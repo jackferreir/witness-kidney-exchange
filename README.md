@@ -63,9 +63,16 @@ P >= 250, with a naive Fisher exact p ≈ 1.6e-8. That comparison is retired.
 Three defects, all found by adversarial review of this repo's own data:
 
 1. **It mixed solvers.** The 2-cycle arm ran Blossom, the 3-cycle arm ran
-   the ILP. Separately in this project, swapping tiebreak policy on
-   identical markets changed which hospitals could manipulate (0/135 vs
-   4/135, *zero overlap*), so a solver difference is not innocuous.
+   the ILP. That is not innocuous, because tie-breaking is not incidental
+   here: across the census below (n = 6,908), **50.7% of hospitals have an
+   outcome that varies depending on which tied optimal clearing is
+   returned**, and the two solvers resolve those ties differently. An
+   earlier draft of this README cited a sharper figure (0/135 manipulable
+   under the ILP rule vs 4/135 under Blossom on identical markets); that
+   run's raw data is not in `results/`, so the claim is withdrawn here in
+   favour of the census figure, which is reproducible. Note also that
+   "zero overlap" was a vacuous way to describe 0-vs-4: one of those sets
+   is empty.
 2. **It mixed ownership seeds** across its three constituent runs.
 3. **Its significance leaned on a 45-check run** seeded `smoke-cap-test`.
    Dropping P=500, the sign test falls to 6/8, p = 0.29.
