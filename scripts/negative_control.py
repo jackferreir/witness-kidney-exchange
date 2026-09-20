@@ -201,6 +201,7 @@ from witness.reserves import (
     reserve_da,
 )
 from witness.search import search_all_students
+from witness.runlog import begin_run
 
 #: Mechanisms this script knows how to build a `GeneratorConfig`-derived
 #: config for and run directly (for coverage) -- mirrors
@@ -1431,6 +1432,9 @@ def run_sweep(
     byte-for-byte the pre-existing draw.
     """
     os.makedirs(out_dir, exist_ok=True)
+    # Provenance + exclusive lock: see witness/runlog.py. A second live
+    # writer on one out-dir is what corrupted results/samesolver_k3.
+    begin_run(out_dir, note="negative control")
 
     checkpoint = _load_checkpoint(out_dir)
     if checkpoint is not None:

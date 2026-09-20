@@ -61,6 +61,9 @@ from witness.generate_couples import (
 _ORDERS = (COUPLE_ORDER_INTERMIXED, COUPLE_ORDER_COUPLES_FIRST, COUPLE_ORDER_COUPLES_LAST)
 
 
+from witness.runlog import begin_run
+
+
 def measure_rate(
     couples_rate: float,
     n_individuals: int,
@@ -256,6 +259,9 @@ def main() -> None:
     out_dir = os.path.dirname(args.out)
     if out_dir:
         os.makedirs(out_dir, exist_ok=True)
+        # Provenance + exclusive lock: see witness/runlog.py. A second live
+        # writer on one out-dir is what corrupted results/samesolver_k3.
+        begin_run(out_dir, note="couples sequencing")
     with open(args.out, "w", encoding="utf-8") as f:
         json.dump(summary, f, indent=2, sort_keys=True)
 

@@ -124,3 +124,66 @@ def test_run_record_captures_enough_to_repeat_the_run():
     for field in ("argv", "cwd", "git", "versions", "started", "host"):
         assert rec.get(field) is not None, f"{field} missing: run is not repeatable"
     assert "ortools" in rec["versions"]
+
+
+# --------------------------------------------------------------------------
+# begin_run: the one-line entry point used by the scripts. Its signal
+# handling is the part that matters here -- these jobs are routinely killed,
+# and a `finally:` block does not run on SIGTERM.
+# --------------------------------------------------------------------------
+
+from witness.runlog import begin_run  # noqa: E402
+
+
+def test_sigterm_is_recorded_as_killed_not_left_running():
+    """A killed run must be visibly killed. Under a context manager alone
+    it would sit at status 'running' forever, which is indistinguishable
+    from a run still in progress -- the samesolver_k3 ambiguity."""
+    with tempfile.TemporaryDirectory() as d:
+        out = os.path.join(d, "run")
+        script = os.path.join(d, "s.py")
+        with open(script, "w") as f:
+            f.write(
+                "import sys, time\n"
+                f"sys.path.insert(0, {PROJECT_ROOT!r})\n"
+                "from witness.runlog import begin_run\n"
+                f"begin_run({out!r}, note='sigterm')\n"
+                "time.sleep(60)\n")
+        proc = subprocess.Popen([sys.executable, script])
+        import time as _t
+        _t.sleep(3)
+        proc.terminate()
+        proc.wait(timeout=30)
+        rec = read_run(out)
+    assert rec["status"] == "killed"
+    assert "15" in rec["error"]
+    assert not os.path.exists(os.path.join(out, LOCK_FILE)), "lock not released on kill"
+
+
+def test_begin_run_releases_lock_on_clean_exit():
+    with tempfile.TemporaryDirectory() as d:
+        out = os.path.join(d, "run")
+        script = os.path.join(d, "s.py")
+        with open(script, "w") as f:
+            f.write(
+                "import sys\n"
+                f"sys.path.insert(0, {PROJECT_ROOT!r})\n"
+                "from witness.runlog import begin_run\n"
+                f"begin_run({out!r})\n")
+        subprocess.run([sys.executable, script], check=True, timeout=60)
+        rec = read_run(out)
+    assert rec["status"] == "complete"
+    assert not os.path.exists(os.path.join(out, LOCK_FILE))
+
+
+def test_every_result_writing_script_is_wired_to_the_ledger():
+    """Coverage gate. A new script that writes results without provenance
+    fails here rather than producing another unattributable directory."""
+    import glob
+    unwired = []
+    for p in sorted(glob.glob(os.path.join(PROJECT_ROOT, "scripts", "*.py"))):
+        src = open(p).read()
+        writes_results = "out_dir" in src or "out-dir" in src
+        if writes_results and "begin_run" not in src and "record_run" not in src:
+            unwired.append(os.path.basename(p))
+    assert not unwired, f"scripts write result dirs without provenance: {unwired}"

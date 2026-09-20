@@ -67,6 +67,7 @@ from witness.kidney import (
 )
 from witness.kidney_real_data import load_real_kidney_market, real_instances_for_p
 from witness.search_kidney import hospital_misreport_space
+from witness.runlog import begin_run
 
 
 def _ilp_select(market, candidates, seed, max_seconds):
@@ -143,6 +144,9 @@ def main():
 
     out_dir = args.out_dir or f"results/kidney_policy_panel_p{args.p}_k{args.k}"
     os.makedirs(out_dir, exist_ok=True)
+    # Provenance + exclusive lock: see witness/runlog.py. A second live
+    # writer on one out-dir is what corrupted results/samesolver_k3.
+    begin_run(out_dir, note="symmetric tiebreak policy panel")
     rows_path = os.path.join(out_dir, "rows.jsonl")
     done = set()
     if os.path.exists(rows_path):

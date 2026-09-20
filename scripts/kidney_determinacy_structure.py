@@ -57,6 +57,7 @@ from witness.kidney import (
     candidate_cycles,
 )
 from witness.search_kidney import find_best_hospital_manipulation
+from witness.runlog import begin_run
 
 
 def pair_status(market, report_map, pair, c_star, k, max_seconds):
@@ -123,6 +124,9 @@ def main() -> None:
 
     out_dir = args.out_dir or f"results/determinacy_structure_k{args.k}"
     os.makedirs(out_dir, exist_ok=True)
+    # Provenance + exclusive lock: see witness/runlog.py. A second live
+    # writer on one out-dir is what corrupted results/samesolver_k3.
+    begin_run(out_dir, note="determinacy structure probe")
     rows_path = os.path.join(out_dir, "rows.jsonl")
     done = set()
     if os.path.exists(rows_path):

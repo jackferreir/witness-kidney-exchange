@@ -89,6 +89,7 @@ from witness.kidney_ownership import REGIME_CORE_PERIPHERY, REGIME_POWER_LAW, RE
 from witness.kidney_real_data import load_real_kidney_market, real_instances_for_p
 from witness.replay_kidney import verify_in_subprocess
 from witness.search_kidney import find_hospital_manipulation
+from witness.runlog import begin_run
 
 REGIME_CHOICES = (REGIME_UNIFORM, REGIME_POWER_LAW, REGIME_CORE_PERIPHERY)
 
@@ -349,6 +350,12 @@ def main() -> None:
         raise SystemExit("--sizes and --draws-per-member must have the same length")
 
     os.makedirs(args.out_dir, exist_ok=True)
+
+    # Provenance + exclusive lock: see witness/runlog.py. A second live
+
+    # writer on one out-dir is what corrupted results/samesolver_k3.
+
+    begin_run(args.out_dir, note="ownership skew sweep")
     rows_path = os.path.join(args.out_dir, "hospital_rows.jsonl")
     confirmed_path = os.path.join(args.out_dir, "witnesses.jsonl")
     failures_path = os.path.join(args.out_dir, "verification_failures.jsonl")

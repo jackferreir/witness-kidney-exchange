@@ -35,6 +35,7 @@ from witness.kidney import (
 )
 from witness.replay_kidney import verify_in_subprocess
 from witness.search_kidney import DEFAULT_MAX_REPORT_SPACE, find_hospital_manipulation
+from witness.runlog import begin_run
 
 
 def main() -> None:
@@ -55,6 +56,12 @@ def main() -> None:
     args = p.parse_args()
 
     os.makedirs(args.out_dir, exist_ok=True)
+
+    # Provenance + exclusive lock: see witness/runlog.py. A second live
+
+    # writer on one out-dir is what corrupted results/samesolver_k3.
+
+    begin_run(args.out_dir, note="kidney manipulation search")
     confirmed_path = os.path.join(args.out_dir, "witnesses.jsonl")
     failures_path = os.path.join(args.out_dir, "verification_failures.jsonl")
     summary_path = os.path.join(args.out_dir, "summary.json")

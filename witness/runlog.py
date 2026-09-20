@@ -222,6 +222,108 @@ def record_run(out_dir: str, *, note: str = "", allow_concurrent: bool = False):
                 os.unlink(lock_path)
 
 
+def begin_run(out_dir: str, *, note: str = "", allow_concurrent: bool = False) -> dict:
+    """One-line alternative to `record_run` for scripts with a monolithic
+    `main()`. Call it once, as soon as `out_dir` is known.
+
+    Finalisation is installed rather than scoped: an `atexit` hook, an
+    exception hook, and SIGTERM/SIGINT handlers. That is not merely more
+    convenient than restructuring fifteen scripts -- it is strictly more
+    robust for this project, because these jobs are routinely killed, and a
+    `finally:` block does NOT run when the process takes a SIGTERM. Under
+    `record_run` a killed sweep would leave RUN.json at "running" forever;
+    here it is recorded as "killed", with the signal named.
+    """
+    import atexit
+    import signal
+
+    state = _start(out_dir, note=note, allow_concurrent=allow_concurrent)
+
+    def _finish(status: str, error: "str | None" = None):
+        if state["_done"]:
+            return
+        state["_done"] = True
+        rec = state["record"]
+        rec["status"] = status
+        if error:
+            rec["error"] = error
+        _finalize(out_dir, rec, state["t0"], allow_concurrent)
+
+    atexit.register(lambda: _finish("complete"))
+
+    prev_hook = sys.excepthook
+
+    def _hook(exc_type, exc, tb):
+        _finish("failed", f"{exc_type.__name__}: {str(exc)[:300]}")
+        prev_hook(exc_type, exc, tb)
+
+    sys.excepthook = _hook
+
+    for sig in (signal.SIGTERM, signal.SIGINT):
+        prev = signal.getsignal(sig)
+
+        def _handler(signum, frame, _prev=prev):
+            _finish("killed", f"received signal {signum}")
+            if callable(_prev):
+                _prev(signum, frame)
+            else:
+                raise SystemExit(128 + signum)
+
+        with contextlib.suppress(ValueError, OSError):
+            signal.signal(sig, _handler)
+
+    return state["record"]
+
+
+def _start(out_dir: str, *, note: str, allow_concurrent: bool) -> dict:
+    os.makedirs(out_dir, exist_ok=True)
+    lock_path = os.path.join(out_dir, LOCK_FILE)
+    if not allow_concurrent:
+        if os.path.exists(lock_path):
+            try:
+                holder = json.load(open(lock_path))
+                pid = int(holder.get("pid", -1))
+            except Exception:  # noqa: BLE001
+                holder, pid = {}, -1
+            if pid > 0 and _pid_alive(pid):
+                raise OutputDirectoryBusy(
+                    f"{out_dir} is being written by live pid {pid} "
+                    f"(started {holder.get('started')!r}). Two writers on one directory "
+                    f"is what corrupted results/samesolver_k3. Use a different --out-dir."
+                )
+            with contextlib.suppress(OSError):
+                os.unlink(lock_path)
+        with open(lock_path, "w") as f:
+            json.dump({"pid": os.getpid(), "started": _now(), "argv": sys.argv}, f)
+
+    record = {
+        "status": "running", "argv": sys.argv, "cwd": os.getcwd(), "out_dir": out_dir,
+        "note": note, "host": socket.gethostname(), "pid": os.getpid(),
+        "git": _git_state(), "versions": _versions(), "started": _now(),
+        "ended": None, "elapsed_seconds": None, "outputs": {},
+    }
+    with open(os.path.join(out_dir, RUN_FILE), "w") as f:
+        json.dump(record, f, indent=2, sort_keys=True)
+    return {"record": record, "t0": time.time(), "_done": False}
+
+
+def _finalize(out_dir: str, record: dict, t0: float, allow_concurrent: bool) -> None:
+    record["ended"] = _now()
+    record["elapsed_seconds"] = round(time.time() - t0, 1)
+    with contextlib.suppress(Exception):
+        record["outputs"] = _scan_outputs(out_dir)
+    with contextlib.suppress(Exception):
+        with open(os.path.join(out_dir, RUN_FILE), "w") as f:
+            json.dump(record, f, indent=2, sort_keys=True)
+    with contextlib.suppress(Exception):
+        with open(os.path.join(out_dir, RUNS_LOG), "a") as f:
+            f.write(json.dumps({k: v for k, v in record.items() if k != "outputs"},
+                               sort_keys=True) + "\n")
+    if not allow_concurrent:
+        with contextlib.suppress(OSError):
+            os.unlink(os.path.join(out_dir, LOCK_FILE))
+
+
 def read_run(out_dir: str) -> "dict | None":
     p = os.path.join(out_dir, RUN_FILE)
     if not os.path.exists(p):

@@ -69,6 +69,7 @@ from witness.kidney_ownership import build_ownership
 from witness.kidney_real_data import load_real_kidney_market, real_instances_for_p
 from witness.replay_kidney import verify_in_subprocess
 from witness.search_kidney import find_best_hospital_manipulation
+from witness.runlog import begin_run
 
 
 def main() -> None:
@@ -106,6 +107,9 @@ def main() -> None:
 
     out_dir = args.out_dir or f"results/kidney_tiebreak_census_p{args.p}"
     os.makedirs(out_dir, exist_ok=True)
+    # Provenance + exclusive lock: see witness/runlog.py. A second live
+    # writer on one out-dir is what corrupted results/samesolver_k3.
+    begin_run(out_dir, note="outcome-blind tiebreak census")
     rows_path = os.path.join(out_dir, "hospital_rows.jsonl")
 
     done = set()

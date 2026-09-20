@@ -58,6 +58,7 @@ from witness.kidney import (
 )
 from witness.replay_kidney import verify_in_subprocess
 from witness.search_kidney import find_best_hospital_manipulation
+from witness.runlog import begin_run
 
 
 def main() -> None:
@@ -77,6 +78,9 @@ def main() -> None:
 
     out_dir = args.out_dir or f"results/determinacy_synth_k{args.k}_n{args.n_pairs}"
     os.makedirs(out_dir, exist_ok=True)
+    # Provenance + exclusive lock: see witness/runlog.py. A second live
+    # writer on one out-dir is what corrupted results/samesolver_k3.
+    begin_run(out_dir, note="determinacy on synthetic graphs")
     rows_path = os.path.join(out_dir, "rows.jsonl")
     done = set()
     if os.path.exists(rows_path):

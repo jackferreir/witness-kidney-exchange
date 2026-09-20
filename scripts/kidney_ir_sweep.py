@@ -64,6 +64,7 @@ from witness.kidney_ir import (
     verify_in_subprocess,
 )
 from witness.kidney_real_data import load_real_kidney_market, real_instances_for_p
+from witness.runlog import begin_run
 
 #: Default job priority: (max_cycle_length, p, draws_per_member). K=3 P=250
 #: first (the headline regime), then K=3 P=100/50, then K=2 -- see module
@@ -320,6 +321,12 @@ def main() -> None:
             jobs.append((int(k_s), int(p_s), int(d_s)))
 
     os.makedirs(args.out_dir, exist_ok=True)
+
+    # Provenance + exclusive lock: see witness/runlog.py. A second live
+
+    # writer on one out-dir is what corrupted results/samesolver_k3.
+
+    begin_run(args.out_dir, note="IR mechanism sweep")
     eff_path = os.path.join(args.out_dir, "efficiency.jsonl")
     dev_path = os.path.join(args.out_dir, "deviation_checks.jsonl")
     wit_path = os.path.join(args.out_dir, "deviation_witnesses.jsonl")

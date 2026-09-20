@@ -41,6 +41,9 @@ from witness.search_couples import (
 )
 
 
+from witness.runlog import begin_run
+
+
 def main() -> None:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--n-individuals", type=int, default=8)
@@ -59,6 +62,12 @@ def main() -> None:
     args = p.parse_args()
 
     os.makedirs(args.out_dir, exist_ok=True)
+
+    # Provenance + exclusive lock: see witness/runlog.py. A second live
+
+    # writer on one out-dir is what corrupted results/samesolver_k3.
+
+    begin_run(args.out_dir, note="couples manipulation search")
     confirmed_path = os.path.join(args.out_dir, "witnesses.jsonl")
     failures_path = os.path.join(args.out_dir, "verification_failures.jsonl")
     summary_path = os.path.join(args.out_dir, "summary.json")

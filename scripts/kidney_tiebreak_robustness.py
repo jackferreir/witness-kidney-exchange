@@ -117,6 +117,9 @@ DEFAULT_MAX_ILP_SECONDS = 60.0
 # ---------------------------------------------------------------------------
 
 
+from witness.runlog import begin_run
+
+
 def _central_c_star(
     market: KidneyMarket, reported_pool: Sequence[str], max_cycle_length: int, max_seconds: Optional[float]
 ):
@@ -406,6 +409,10 @@ def _iter_witnesses(paths: Sequence[str]):
 
 def _run(witness_files: Sequence[str], max_seconds: Optional[float], out_dir: Path) -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
+    # Provenance + exclusive lock (witness/runlog.py). These runs are
+    # routinely killed mid-flight; begin_run records that as "killed"
+    # rather than leaving the directory looking merely sparse.
+    begin_run(str(out_dir), note="tiebreak robustness check")
     per_witness_path = out_dir / "per_witness.jsonl"
 
     done_ids = _load_done_ids(per_witness_path)

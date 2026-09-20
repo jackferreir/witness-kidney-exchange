@@ -49,6 +49,7 @@ from witness.kidney_ir import verify_in_subprocess as verify_ir_in_subprocess
 from witness.kidney_real_data import load_real_kidney_market, real_instances_for_p
 from witness.replay_kidney import verify_in_subprocess as verify_plain_in_subprocess
 from witness.search_kidney import find_hospital_manipulation
+from witness.runlog import begin_run
 
 
 def mcnemar(b: int, c: int) -> "tuple[float, float]":
@@ -78,6 +79,12 @@ def main() -> None:
     args = ap.parse_args()
 
     os.makedirs(args.out_dir, exist_ok=True)
+
+    # Provenance + exclusive lock: see witness/runlog.py. A second live
+
+    # writer on one out-dir is what corrupted results/samesolver_k3.
+
+    begin_run(args.out_dir, note="paired plain-vs-IR")
     rows_path = os.path.join(args.out_dir, "paired_rows.jsonl")
 
     done = set()

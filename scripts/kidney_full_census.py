@@ -36,6 +36,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from witness.kidney import IlpTimeLimitExceeded, KidneyConfig, KidneyMarket, KidneyProfile, TIEBREAK_MAX_CARDINALITY_ILP
 from witness.replay_kidney import verify_in_subprocess
 from witness.search_kidney import find_best_hospital_manipulation
+from witness.runlog import begin_run
 
 
 def load_distinct_markets(witness_files):
@@ -69,6 +70,12 @@ def main() -> None:
     args = p.parse_args()
 
     os.makedirs(args.out_dir, exist_ok=True)
+
+    # Provenance + exclusive lock: see witness/runlog.py. A second live
+
+    # writer on one out-dir is what corrupted results/samesolver_k3.
+
+    begin_run(args.out_dir, note="full census aggregation")
     confirmed_path = os.path.join(args.out_dir, "witnesses.jsonl")
     failures_path = os.path.join(args.out_dir, "verification_failures.jsonl")
     summary_path = os.path.join(args.out_dir, "summary.json")
