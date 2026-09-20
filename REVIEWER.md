@@ -56,6 +56,15 @@ no test bites on is not verified.
 **Every finding replays from its saved witness alone, in a fresh subprocess.**
 Not the same interpreter. If it doesn't replay, it isn't a finding.
 
+**No number goes public unless it is registered in `claims.json` and
+`python3 scripts/verify_claims.py` passes.** "Public" means README.md,
+MODEL.md, or an email to anyone outside the project. This rule exists
+because the prose rules above did not work: "re-derive, don't inherit" has
+been in this file since early on, and every error this project has shipped
+still went out under it. A norm is checked only by the person who already
+believes they are following it. The registry is the executable version —
+see "WHY MECHANICAL CHECKS" below.
+
 ## THE REVIEW HEURISTICS — apply these to your own results
 
 **Perfect numbers are artifact-shaped.** 100% coverage, a median of 1, a rate
@@ -147,3 +156,54 @@ by having a subagent reproduce contested numbers from scratch rather than
 inspecting the code that produced them — that method already caught one false
 "defect" report. Where you cannot get independence, say so in the report rather
 than implying a check was independent when it was not.
+
+## WHY MECHANICAL CHECKS — the three shapes every shipped error took
+
+Every incorrect claim this project has published had one of three shapes.
+None was caught by the prose rules above. `claims.json` plus
+`scripts/verify_claims.py` turn each shape into a test that fails.
+
+**(A) Incommensurable comparison.** Two numbers compared that differ in more
+than the one respect being claimed. The plain-vs-IR comparison differed in
+the IR constraint *and* the tie-breaking rule; since manipulability is
+provably tie-break contingent at k=2, the two effects were not separable,
+so the reported magnitudes meant nothing. The "25x tie-break" claim compared
+a range taken over all tied optima against a gain measured under one fixed
+rule.
+
+*Check C1:* each arm declares its full config; the verifier diffs them and
+requires the differing keys to equal `varies` exactly. An undeclared
+difference fails even if the author believes it immaterial.
+
+**(B) Inherited number.** A figure established under method X, reused under
+method Y without re-derivation. "Gain is always exactly 1" was true of a
+first-hit search and false of the max-gain census that replaced it. Size-
+effect p-values were carried across from the tie-break analysis. A README
+cited `clustered_inference.py` for a comparison that script never performed.
+
+*Check P0:* every claim names the files it derives from, and they must
+exist. Re-deriving from a named source is the only way to register a number.
+
+**(C) Scope overreach.** Evidence covering population P stated as a claim
+about superset Q. "The IR constraint never binds" was verified at the
+truthful profile only — and the matched-tie-break control later showed the
+constraint *does* bite under misreports, which nearly caused a correct
+finding to be retracted. A determinacy denominator counted hospitals already
+matching all their own pairs, which cannot gain by construction, inflating
+195,123 to 490,147.
+
+*Checks C2 and C3:* `eligibility` must state which rows count and which are
+excluded and why; `scope` must state the tested population, and a claim
+whose text uses a universal quantifier ("never", "every", "no") fails
+unless scope is explicit about it.
+
+**The meta-lesson.** All three are the same underlying failure: a claim's
+justification lived in the author's head rather than in a form anything
+could check. The registry does not make anyone more careful. It makes the
+uncheckable claim impossible to file.
+
+**Retracting is also a claim.** A retraction needs the same standard of
+evidence as an assertion — twice in this project a correct result was nearly
+withdrawn on the strength of a test that did not actually test it. A claim
+marked `retracted` must carry a `retraction` field saying what specifically
+failed, and the verifier enforces that.
