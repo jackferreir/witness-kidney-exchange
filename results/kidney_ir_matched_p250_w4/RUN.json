@@ -1,0 +1,38 @@
+{
+  "argv": [
+    "scripts/kidney_ir_paired.py",
+    "--p",
+    "250",
+    "--k",
+    "3",
+    "--draws",
+    "12",
+    "--ownership-seed",
+    "ir-paired-p250-w4",
+    "--max-ilp-seconds",
+    "120",
+    "--out-dir",
+    "results/kidney_ir_matched_p250_w4"
+  ],
+  "cwd": "/Users/joseferreira/Desktop/Witness",
+  "elapsed_seconds": null,
+  "ended": null,
+  "git": {
+    "commit": "882c27bfb4c28bc2813e259fed4f697fd90cd301",
+    "dirty": true,
+    "dirty_files": 9
+  },
+  "host": "Joses-MacBook-Air-3.local",
+  "note": "paired plain-vs-IR",
+  "out_dir": "results/kidney_ir_matched_p250_w4",
+  "outputs": {},
+  "pid": 31848,
+  "started": "2026-09-20T10:32:54+00:00",
+  "status": "running",
+  "versions": {
+    "networkx": "3.6.1",
+    "numpy": "2.4.6",
+    "ortools": "9.15.6755",
+    "python": "3.12.4"
+  }
+}

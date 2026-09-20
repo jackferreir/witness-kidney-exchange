@@ -1,0 +1,1 @@
+{"pid": 31846, "started": "2026-09-20T10:32:54+00:00", "argv": ["scripts/kidney_ir_paired.py", "--p", "250", "--k", "3", "--draws", "12", "--ownership-seed", "ir-paired-p250-w3", "--max-ilp-seconds", "120", "--out-dir", "results/kidney_ir_matched_p250_w3"]}

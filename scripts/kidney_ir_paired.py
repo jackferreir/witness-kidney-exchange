@@ -160,6 +160,32 @@ def main() -> None:
                 except Exception as exc:  # noqa: BLE001
                     plain_status = f"error:{type(exc).__name__}"
 
+                # --- MATCHED-TIEBREAK CONTROL arm ---
+                # The plain arm above maximises cardinality alone and takes
+                # whatever CP-SAT returns; the IR arm maximises
+                # BIG*cardinality - rank_sum, i.e. a DIFFERENT tie-breaking
+                # rule. Comparing those two attributes to the IR constraint
+                # an effect that is partly tie-break, and manipulability is
+                # provably tie-break contingent (MODEL.md 7.4b). Running the
+                # IR model with every standalone floor set to zero makes the
+                # constraint vacuous while keeping its tie-break, so
+                # plainlex-vs-ir varies the constraint AND NOTHING ELSE.
+                plainlex_status, plainlex_hit = "ok", False
+                try:
+                    wpl, _stats = find_hospital_manipulation_ir(
+                        market, profile, h,
+                        max_cycle_length=args.k,
+                        max_ilp_seconds=args.max_ilp_seconds,
+                        standalone_values={hh: 0 for hh in market.hospitals},
+                    )
+                    if wpl is not None:
+                        ok, _ = verify_ir_in_subprocess(wpl.to_dict())
+                        plainlex_hit = bool(ok)
+                except IlpTimeLimitExceeded:
+                    plainlex_status = "skipped"
+                except Exception as exc:  # noqa: BLE001
+                    plainlex_status = f"error:{type(exc).__name__}"
+
                 # --- IR arm, SAME instance, SAME cap ---
                 ir_status, ir_hit = "ok", False
                 try:
@@ -181,8 +207,13 @@ def main() -> None:
                     "id": rid, "p": args.p, "k": args.k, "draw": draw, "member": member, "hospital": h,
                     "hospital_size": len(market.pairs_of(h)),
                     "plain_status": plain_status, "plain_hit": plain_hit,
+                    "plainlex_status": plainlex_status, "plainlex_hit": plainlex_hit,
                     "ir_status": ir_status, "ir_hit": ir_hit,
                     "both_resolved": plain_status == "ok" and ir_status == "ok",
+                    # the comparison that is actually commensurable
+                    "matched_resolved": plainlex_status == "ok" and ir_status == "ok",
+                    "all_resolved": (plain_status == "ok" and plainlex_status == "ok"
+                                     and ir_status == "ok"),
                 })
 
                 # running report over jointly-resolved pairs only
@@ -193,6 +224,16 @@ def main() -> None:
                 pl = sum(1 for r in both if r["plain_hit"])
                 ir = sum(1 for r in both if r["ir_hit"])
                 stat, pv = mcnemar(b, c)
+                # the commensurable comparison: same tie-break, constraint only
+                matched = [r for r in rows if r.get("matched_resolved")]
+                mb = sum(1 for r in matched if r["plainlex_hit"] and not r["ir_hit"])
+                mc = sum(1 for r in matched if r["ir_hit"] and not r["plainlex_hit"])
+                mpl = sum(1 for r in matched if r["plainlex_hit"])
+                mir = sum(1 for r in matched if r["ir_hit"])
+                _, mpv = mcnemar(mb, mc)
+                print(
+                    f"[matched] n={len(matched)} | plain+lex {mpl} vs IR {mir} "
+                    f"| IR-fixed={mb} IR-created={mc} McNemar p={mpv:.4g}", flush=True)
                 print(
                     f"[paired] attempted={len(rows)} both_resolved={len(both)} "
                     f"({len(both)/len(rows)*100:.0f}%) | plain {pl}/{len(both)} vs IR {ir}/{len(both)} "
