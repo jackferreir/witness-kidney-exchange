@@ -1,0 +1,27 @@
+{
+  "honesty_note": "Compatibility graph is REAL (Pansart et al. 2022 published KEP benchmark, max_cycle_length=3 -- see witness.kidney_real_data). Hospital ownership is SYNTHETIC (declared seeded partition), never real hospital behavior. Only up to 15 distinct real graphs exist per size, so repeated ownership draws over the SAME small set of real graphs supply the sample size -- not 15x-draws independent real graphs.",
+  "max_cycle_length": 3,
+  "n_total_checks": 300,
+  "n_total_skipped_too_hard": 0,
+  "n_total_verification_failures": 0,
+  "ownership_seed": "same-solver-v1",
+  "pairs_per_hospital_target": 6,
+  "per_size": [
+    {
+      "draws_per_member": 20,
+      "manipulation_rate": 0.07666666666666666,
+      "mean_edges_per_instance": 3997.8,
+      "n_checks": 300,
+      "n_confirmed": 23,
+      "n_hospitals": 42,
+      "n_real_members": 15,
+      "n_skipped_too_hard": 0,
+      "n_verification_failures": 0,
+      "p": 250,
+      "pairs_per_hospital_target": 6,
+      "seconds_per_check": 36.345763584166704,
+      "wall_seconds": 10903.729075250012
+    }
+  ],
+  "tiebreak_policy": "max_cardinality_ilp"
+}

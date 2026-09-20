@@ -14,6 +14,7 @@ verifier feeds through `Measurement.compare_to`.
 from __future__ import annotations
 
 import glob
+import json
 import os
 
 from witness.measurement import Measurement, load_jsonl
@@ -23,6 +24,53 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 def _paths(pattern: str) -> list:
     return sorted(glob.glob(os.path.join(ROOT, pattern)))
+
+
+# --------------------------------------------------------------------------
+# cycle_length_p250_paired
+# --------------------------------------------------------------------------
+
+def _sweep_rows(summary_path: str, p: int, cycle_length: int) -> list:
+    """`kidney_real_data_sweep.py` never writes a per-check row -- only
+    confirmed witnesses and an aggregate summary. n_checks and n_confirmed
+    in that summary ARE the complete record of every check attempted
+    (n_skipped_too_hard is tracked and excluded separately, never silently
+    folded into n_checks), so synthesising one row per check from those two
+    counts is not an approximation: it is the full eligible population,
+    just without a per-row detail file to re-read.
+    """
+    d = json.load(open(summary_path))
+    block = next(s for s in d["per_size"] if s["p"] == p)
+    assert block["n_skipped_too_hard"] == 0, (
+        "skipped checks exist and are not represented in n_checks; "
+        "this derivation would then understate the eligible population")
+    n, hits = block["n_checks"], block["n_confirmed"]
+    return [{"hit": i < hits, "cycle_length": cycle_length, "pool_size": p,
+             "ownership_seed": d["ownership_seed"], "tiebreak": d["tiebreak_policy"]}
+            for i in range(n)]
+
+
+def cycle_length_p250_paired():
+    """The headline: same solver, same ownership seed, same partitions,
+    only cycle length differs. K=3 arm was RE-RUN after the original was
+    corrupted by a duplicate-launch race (see claims.json blocker, now
+    cleared) -- results/samesolver_k3_p250, a clean single-writer run."""
+    k2 = _sweep_rows(os.path.join(ROOT, "results/samesolver_k2/summary.json"), 250, 2)
+    k3 = _sweep_rows(os.path.join(ROOT, "results/samesolver_k3_p250/summary.json"), 250, 3)
+    elig = "all attempted checks; zero skipped as too-hard in either arm"
+    a = Measurement.from_rows(
+        k2, unit="hospital_check", eligibility=elig, eligible=lambda r: True,
+        hit=lambda r: r["hit"],
+        config_of=lambda r: {"cycle_length": r["cycle_length"], "pool_size": r["pool_size"],
+                             "ownership_seed": r["ownership_seed"], "tiebreak": r["tiebreak"]},
+        sources=["results/samesolver_k2/summary.json"])
+    b = Measurement.from_rows(
+        k3, unit="hospital_check", eligibility=elig, eligible=lambda r: True,
+        hit=lambda r: r["hit"],
+        config_of=lambda r: {"cycle_length": r["cycle_length"], "pool_size": r["pool_size"],
+                             "ownership_seed": r["ownership_seed"], "tiebreak": r["tiebreak"]},
+        sources=["results/samesolver_k3_p250/summary.json"])
+    return a, b, ["cycle_length"]
 
 
 # --------------------------------------------------------------------------
@@ -107,6 +155,7 @@ def claim_a_k2_corroboration():
 
 
 REGISTRY = {
+    "cycle_length_p250_paired": cycle_length_p250_paired,
     "ir_paired_rates": ir_paired_rates,
     "determinacy_k2_synth": determinacy_k2_synth,
     "claim_a_k2_corroboration": claim_a_k2_corroboration,

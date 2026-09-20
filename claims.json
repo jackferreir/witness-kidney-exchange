@@ -51,7 +51,8 @@
       "unit": "source_graph",
       "eligibility": "All outcome-blind hospital checks that resolved in both arms. Zero skipped in either arm.",
       "sources": [
-        "results/samesolver_k2/summary.json"
+        "results/samesolver_k2/summary.json",
+        "results/samesolver_k3_p250/summary.json"
       ],
       "arms": {
         "a": {
@@ -80,8 +81,18 @@
       "varies": [
         "cycle_length"
       ],
-      "status": "under_review",
-      "blocker": "The K=3 arm cannot be re-derived: results/samesolver_k3/summary.json was never written (the run was killed mid-P=500) and witnesses.jsonl was corrupted by a duplicate-launch race that truncated it while a second process held it open. The figure 23/300 survives only in a session log, which is not repo data. The K=2 arm (3/300) is intact. Re-run the K=3 arm, or cite the census-based comparison instead, which is derivable from committed rows."
+      "status": "verified",
+      "derivation": "cycle_length_p250_paired",
+      "expect": {
+        "a_numerator": 3,
+        "a_denominator": 300,
+        "b_numerator": 23,
+        "b_denominator": 300,
+        "varies": [
+          "cycle_length"
+        ]
+      },
+      "note": "K=3 arm re-run 2026-09-19 in a clean single-writer directory (results/samesolver_k3_p250) after the original was corrupted by a duplicate-launch race. Reproduces the original figure exactly: 23/300 = 7.67%."
     },
     {
       "id": "ir_efficiency_cost",
