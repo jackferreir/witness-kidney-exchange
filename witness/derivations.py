@@ -98,7 +98,12 @@ def minimal_boundary_search():
         eligible=lambda r: True,
         hit=lambda r: r["matches_docstring"],
         config_of=lambda r: {"n": r["n"], "k": r["k"]},
-        sources=["scripts/kidney_minimal_boundary_search.py"])
+        sources=["scripts/kidney_minimal_boundary_search.py"],
+        # These four cells are DELIBERATELY pooled into one pass/fail figure:
+        # the claim is "every cell the docstring names matches", not any one
+        # cell in isolation, so n and k are declared as pooled rather than
+        # left to trip the heterogeneous-rows guard.
+        pool_over=["n", "k"])
 
 
 # --------------------------------------------------------------------------

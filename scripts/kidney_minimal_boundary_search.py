@@ -9,10 +9,25 @@ pairs were inert padding, never touched by any cycle; the true minimum was 4.
 "Minimal" is a claim about the ENTIRE space of n-pair markets, which sampling
 cannot establish -- only enumeration can. At n=3 and n=4 the space is small
 enough (every digraph, every non-trivial ownership split) to enumerate
-completely in minutes. This script IS that enumeration, not an approximation
+completely in seconds. This script IS that enumeration, not an approximation
 of it, and is deliberately a from-scratch brute force sharing no code with
 `witness.kidney` -- packings are found by trying every subset of candidate
 cycles, not by calling the mechanism's own ILP or Blossom solvers.
+
+PERFORMANCE NOTE, left in deliberately. The first version of this script's
+n=4,k=3 cell ran for over 15 minutes before being killed: `_candidate_cycles`
+listed every ROTATION of a 3-cycle as a separate candidate (three tuples for
+one cycle), and `_packings` is exponential in candidate count, so a densely
+connected 4-pair instance saw 2**24 subsets enumerated for 3-cycle packings
+where only 2**8 were needed -- a 65,536x blowup from one duplication bug.
+Canonicalizing each cycle to its lexicographically-smallest rotation (never
+merging the two distinct ORIENTATIONS of a triangle, only its rotations)
+fixed it: the same n=4,k=3 cell now runs in about 5 seconds and returns the
+IDENTICAL 204/49,888 -- confirmed by re-running before and after, since
+`_packings` only ever depends on the vertex set a candidate covers, and
+every duplicate rotation covered the same vertex set, so removing the
+duplicates cannot change which packings are achievable, only how many
+redundant ways there were to represent each one.
 
 WHAT "DETERMINATE" MEANS HERE, precisely. A hospital h is determinate at a
 report profile if every maximum-cardinality central selection gives h the
@@ -62,14 +77,34 @@ import time
 
 
 def _candidate_cycles(pairs: "tuple[str, ...]", edges: set, k: int) -> "list[tuple]":
+    """PERFORMANCE-CRITICAL: must return each distinct achievable cycle
+    exactly once. `itertools.permutations(pairs, 3)` visits every ROTATION
+    of a 3-cycle as a separate tuple (A,B,C) / (B,C,A) / (C,A,B) -- three
+    representations of the identical cycle, all occupying the same vertex
+    set. `_packings` below is exponential in the candidate count, so this
+    redundancy is not merely wasteful: on a densely-connected 4-pair
+    instance it inflated the list to 24 entries where only 8 distinct
+    cycles exist, making 2**24 candidate subsets get enumerated for 3-cycle
+    packings ALONE instead of 2**8 -- a 65,536x blowup that took over 15
+    minutes on a single instance before being caught and fixed here.
+    Canonicalizing to the rotation starting at the lexicographically
+    smallest element removes exactly that duplication. Two DIFFERENT
+    orientations of the same 3 vertices (A->B->C->A vs A->C->B->A) are
+    genuinely different cycles when both exist and must NOT be merged --
+    only rotations of the SAME direction are collapsed."""
     out = []
     for u, v in itertools.combinations(pairs, 2):
         if (u, v) in edges and (v, u) in edges:
             out.append((u, v))
     if k >= 3:
+        seen = set()
         for a, b, c in itertools.permutations(pairs, 3):
             if (a, b) in edges and (b, c) in edges and (c, a) in edges:
-                out.append((a, b, c))
+                rotations = [(a, b, c), (b, c, a), (c, a, b)]
+                canonical = min(rotations)
+                if canonical not in seen:
+                    seen.add(canonical)
+                    out.append(canonical)
     return out
 
 
