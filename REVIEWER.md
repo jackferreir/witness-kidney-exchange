@@ -207,3 +207,34 @@ evidence as an assertion — twice in this project a correct result was nearly
 withdrawn on the strength of a test that did not actually test it. A claim
 marked `retracted` must carry a `retraction` field saying what specifically
 failed, and the verifier enforces that.
+
+## RUN PROVENANCE — what must be recoverable about every result
+
+A number is only as checkable as the run that produced it. Three failures
+in one night were all invisible after the fact, and all are now recorded or
+prevented by `witness/runlog.py`:
+
+  * a run killed part-way through left a directory that looked merely
+    sparse rather than incomplete, and its figure was quoted as final;
+  * two processes launched against one output directory truncated each
+    other's file, since the sweep script opens outputs with mode "w";
+  * a figure in the README had no surviving run behind it at all, so it
+    could be believed but not checked.
+
+**Every script that writes a result directory wraps its main body in
+`record_run`.** That writes `RUN.json` (status, argv, git sha and dirty
+flag, timestamps, library versions, and a per-file digest with line counts
+and JSON-parseability), appends the attempt to `RUNS.jsonl` so a resumable
+job's restart history survives, and holds an exclusive lock so a second
+live writer on the same directory is an error rather than silent
+corruption.
+
+**`python3 scripts/audit_runs.py` answers "can I trust this directory".**
+It classifies every result as COMPLETE, PARTIAL, FAILED, CORRUPT, or NO
+LEDGER, re-checks digests and JSON-parseability against what the run
+recorded, and exits non-zero if anything is corrupt or partial.
+
+**Results predating the ledger are marked NO LEDGER and are not
+retroactively trustworthy.** The command, the code version, and whether the
+run finished are unrecoverable for them. They may be quoted only after the
+figure is re-derived, which is what `claims.json` requires anyway.

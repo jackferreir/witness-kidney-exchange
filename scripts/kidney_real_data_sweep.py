@@ -37,6 +37,7 @@ from witness.kidney import (
 )
 from witness.kidney_real_data import load_real_kidney_market, real_instances_for_p
 from witness.replay_kidney import verify_in_subprocess
+from witness.runlog import record_run
 from witness.search_kidney import find_hospital_manipulation
 
 
@@ -144,6 +145,17 @@ def main() -> None:
         max_ilp_seconds=args.max_ilp_seconds,
     )
 
+    # `record_run` writes RUN.json and holds an exclusive lock on out_dir.
+    # This script opens its outputs with mode "w", so a second concurrent
+    # launch truncates them under the first writer -- exactly what destroyed
+    # results/samesolver_k3. The lock makes that impossible; RUN.json makes
+    # a killed run visible instead of merely sparse.
+    with record_run(args.out_dir, note=f"real-data sweep k={args.max_cycle_length}") as run:
+        per_size = _sweep(args, config, confirmed_path, failures_path, summary_path)
+        run["result_summary"] = {"per_size": per_size}
+
+
+def _sweep(args, config, confirmed_path, failures_path, summary_path):
     per_size = []
     with open(confirmed_path, "w", encoding="utf-8") as conf_f, \
          open(failures_path, "w", encoding="utf-8") as fail_f:
@@ -175,6 +187,7 @@ def main() -> None:
         json.dump(summary, f, indent=2, sort_keys=True)
     print(json.dumps(summary, indent=2, sort_keys=True))
     print(f"\nwrote {summary_path}, {confirmed_path}, {failures_path}")
+    return per_size
 
 
 if __name__ == "__main__":
