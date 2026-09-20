@@ -1,0 +1,81 @@
+{
+  "disagreements": [
+    {
+      "K": 3,
+      "P": 250,
+      "exact": {
+        "U_false_min": 0,
+        "U_true_max": 6
+      },
+      "exact_verdict": "WEAK",
+      "hospital": "h4",
+      "old": {
+        "false_max": null,
+        "false_min": null,
+        "true_max": null,
+        "true_min": null
+      },
+      "old_verdict": "UNDETERMINED",
+      "witness_id": "7f128c351d7bdd188402350a793fbff48d7b6988f9cf5b214f7930f4ee08fbc9"
+    },
+    {
+      "K": 3,
+      "P": 250,
+      "exact": {
+        "U_false_min": 1,
+        "U_true_max": 3
+      },
+      "exact_verdict": "WEAK",
+      "hospital": "h9",
+      "old": {
+        "false_max": null,
+        "false_min": null,
+        "true_max": null,
+        "true_min": null
+      },
+      "old_verdict": "UNDETERMINED",
+      "witness_id": "c0826f8cd94a0ea234376c458f68d579b7d7c457df5ea97253872d974ad8de64"
+    },
+    {
+      "K": 3,
+      "P": 250,
+      "exact": {
+        "U_false_min": 0,
+        "U_true_max": 3
+      },
+      "exact_verdict": "WEAK",
+      "hospital": "h1",
+      "old": {
+        "false_max": null,
+        "false_min": null,
+        "true_max": null,
+        "true_min": null
+      },
+      "old_verdict": "UNDETERMINED",
+      "witness_id": "e4b050e5631cb0aa242dab0f1df231142ceb75c27741ea6c5d66c5d10293c57b"
+    },
+    {
+      "K": 3,
+      "P": 250,
+      "exact": {
+        "U_false_min": 3,
+        "U_true_max": 5
+      },
+      "exact_verdict": "WEAK",
+      "hospital": "h10",
+      "old": {
+        "false_max": null,
+        "false_min": null,
+        "true_max": null,
+        "true_min": null
+      },
+      "old_verdict": "UNDETERMINED",
+      "witness_id": "f5c89ac3a5e744e7402da7d95740da4bc075fdd4ec2eff1a5309cde2d3eef311"
+    }
+  ],
+  "n_agreements": 27,
+  "n_common": 31,
+  "n_disagreements": 4,
+  "n_only_in_exact": 0,
+  "n_only_in_old": 27
+}

@@ -203,23 +203,26 @@ class Measurement:
     def is_extreme(self, min_units: int = 30) -> "str | None":
         """Why this number needs an adversarial check before it is believed.
 
-        Returns a reason, or None. Exactly-0 and exactly-1 rates are the
-        signatures that have burned this project most often: they are what a
-        denominator full of units that cannot move looks like, and what a
-        filter applied on the wrong side looks like.
+        Returns EVERY applicable reason joined, or None. Returning only the
+        first was itself a defect found by the historical-error suite: a
+        denominator that had been stripped of 90% of its rows also happened
+        to have a rate of exactly 0, and the exactly-0 message masked the far
+        more diagnostic one about the eligibility rule. The least informative
+        signal must not hide the most informative one.
         """
+        reasons = []
         if self.denominator < min_units:
-            return f"rests on only {self.denominator} {self.unit}(s)"
+            reasons.append(f"rests on only {self.denominator} {self.unit}(s)")
         if self.numerator == 0:
-            return f"rate is exactly 0 over {self.denominator} {self.unit}(s)"
+            reasons.append(f"rate is exactly 0 over {self.denominator} {self.unit}(s)")
         if self.numerator == self.denominator:
-            return f"rate is exactly 1 over {self.denominator} {self.unit}(s)"
+            reasons.append(f"rate is exactly 1 over {self.denominator} {self.unit}(s)")
         if self.excluded > 4 * self.denominator:
-            return (
+            reasons.append(
                 f"{self.excluded} rows were excluded against {self.denominator} kept; "
                 f"the eligibility rule is doing most of the work"
             )
-        return None
+        return "; ".join(reasons) if reasons else None
 
     # ---- reporting -----------------------------------------------------
 

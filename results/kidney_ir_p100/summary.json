@@ -1,0 +1,38 @@
+{
+  "comparison_targets": {
+    "plain_k2": "results/kidney_real_data_sweep_v2/summary.json",
+    "plain_k3": "results/kidney_k3_real_sweep_v2/summary.json"
+  },
+  "honesty_note": "Compatibility graph is REAL (Pansart et al. 2022 published KEP benchmark, see witness.kidney_real_data). Hospital ownership is SYNTHETIC (declared seeded partition), never real hospital behavior. The IR-constrained mechanism is defined in witness.kidney_ir: the IR constraint's local-recourse term counts only REPORTED residual pairs (what the mechanism can see); a hospital's REALIZED utility (used for the deviation search) also counts privately clearing withheld pairs afterward, exactly like witness.kidney's own local residual stage -- see that module's own docstring, 'REALIZED OUTCOME VS. THE IR BOOKKEEPING TERM', for why these differ.",
+  "jobs": [
+    {
+      "draws_per_member_configured": 40,
+      "k": 3,
+      "p": 100
+    }
+  ],
+  "n_total_deviation_checks": 600,
+  "n_total_deviation_confirmed": 10,
+  "n_total_efficiency_instances": 600,
+  "n_total_verification_failures": 0,
+  "ownership_seed": "kidney-ir-p100-v1",
+  "pairs_per_hospital_target": 6,
+  "per_job": [
+    {
+      "deviation_rate": 0.016666666666666666,
+      "k": 3,
+      "mean_abs_loss_when_feasible": 0.023333333333333334,
+      "mean_ir_total_when_feasible": 22.243333333333332,
+      "mean_plain_total": 22.266666666666666,
+      "mean_rel_loss_when_feasible": 0.0012605994152046784,
+      "n_deviation_checks": 600,
+      "n_deviation_confirmed": 10,
+      "n_deviation_found_unverified": 0,
+      "n_deviation_reports_infeasible_total": 625,
+      "n_deviation_truthful_ir_infeasible": 0,
+      "n_efficiency_instances": 600,
+      "n_efficiency_ir_infeasible": 0,
+      "p": 100
+    }
+  ]
+}

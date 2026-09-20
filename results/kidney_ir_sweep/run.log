@@ -1,0 +1,81 @@
+resuming: 0 efficiency record(s), 0 deviation-check record(s) already on disk in results/kidney_ir_sweep
+=== job K=3 P=250 draws_per_member=8 ===
+{
+  "p": 250,
+  "k": 3,
+  "n_hospitals": 42,
+  "n_real_members": 15,
+  "draws_per_member": 8,
+  "wall_seconds_this_invocation": 5562.907311374991,
+  "n_efficiency_done_this_invocation": 120,
+  "n_efficiency_skipped_this_invocation": 0,
+  "n_deviation_checks_this_invocation": 120,
+  "n_deviation_skipped_this_invocation": 0
+}
+=== job K=3 P=100 draws_per_member=15 ===
+{
+  "p": 100,
+  "k": 3,
+  "n_hospitals": 17,
+  "n_real_members": 15,
+  "draws_per_member": 15,
+  "wall_seconds_this_invocation": 345.91494629099907,
+  "n_efficiency_done_this_invocation": 225,
+  "n_efficiency_skipped_this_invocation": 0,
+  "n_deviation_checks_this_invocation": 225,
+  "n_deviation_skipped_this_invocation": 0
+}
+=== job K=3 P=50 draws_per_member=20 ===
+{
+  "p": 50,
+  "k": 3,
+  "n_hospitals": 8,
+  "n_real_members": 15,
+  "draws_per_member": 20,
+  "wall_seconds_this_invocation": 80.56253570900299,
+  "n_efficiency_done_this_invocation": 300,
+  "n_efficiency_skipped_this_invocation": 0,
+  "n_deviation_checks_this_invocation": 300,
+  "n_deviation_skipped_this_invocation": 0
+}
+=== job K=2 P=50 draws_per_member=20 ===
+{
+  "p": 50,
+  "k": 2,
+  "n_hospitals": 8,
+  "n_real_members": 15,
+  "draws_per_member": 20,
+  "wall_seconds_this_invocation": 19.703852167003788,
+  "n_efficiency_done_this_invocation": 300,
+  "n_efficiency_skipped_this_invocation": 0,
+  "n_deviation_checks_this_invocation": 300,
+  "n_deviation_skipped_this_invocation": 0
+}
+=== job K=2 P=100 draws_per_member=15 ===
+{
+  "p": 100,
+  "k": 2,
+  "n_hospitals": 17,
+  "n_real_members": 15,
+  "draws_per_member": 15,
+  "wall_seconds_this_invocation": 26.80854487500619,
+  "n_efficiency_done_this_invocation": 225,
+  "n_efficiency_skipped_this_invocation": 0,
+  "n_deviation_checks_this_invocation": 225,
+  "n_deviation_skipped_this_invocation": 0
+}
+=== job K=2 P=250 draws_per_member=8 ===
+{
+  "p": 250,
+  "k": 2,
+  "n_hospitals": 42,
+  "n_real_members": 15,
+  "draws_per_member": 8,
+  "wall_seconds_this_invocation": 86.87729999999283,
+  "n_efficiency_done_this_invocation": 120,
+  "n_efficiency_skipped_this_invocation": 0,
+  "n_deviation_checks_this_invocation": 120,
+  "n_deviation_skipped_this_invocation": 0
+}
+
+wrote results/kidney_ir_sweep/summary.json, results/kidney_ir_sweep/efficiency.jsonl, results/kidney_ir_sweep/deviation_checks.jsonl, results/kidney_ir_sweep/deviation_witnesses.jsonl, results/kidney_ir_sweep/verification_failures.jsonl

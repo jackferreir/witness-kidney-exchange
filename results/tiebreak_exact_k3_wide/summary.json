@@ -1,0 +1,21 @@
+{
+  "by_K_P_bucket": {
+    "K3_P100": {
+      "STRONG_ROBUST": 3,
+      "WEAK": 17
+    },
+    "K3_P250": {
+      "UNDETERMINED": 1,
+      "WEAK": 89
+    },
+    "K3_P50": {
+      "STRONG_ROBUST": 7,
+      "WEAK": 15
+    },
+    "K3_P500": {
+      "UNDETERMINED": 9
+    }
+  },
+  "flagged_witness_ids": [],
+  "total_processed": 141
+}

@@ -1,0 +1,25 @@
+{
+  "gain_distribution": {
+    "1": 7
+  },
+  "honesty_note": "This is a FULL per-market census (every hospital searched, not one per market), using the MAX-gain search. Markets are real-compatibility-graph (Pansart et al. 2022) with synthetic ownership, reused from prior sweeps' saved witness files. This is expected to find a HIGHER rate than prior single-hospital-per-market sweeps, since those undercounted by construction.",
+  "manipulation_rate": 0.08433734939759036,
+  "max_gain_observed": 1,
+  "max_ilp_seconds": 60.0,
+  "max_markets_per_p": 1,
+  "mean_gain_among_hits": 1.0,
+  "n_confirmed": 7,
+  "n_hospital_checks": 83,
+  "n_markets": 1,
+  "n_skipped_too_hard": 29,
+  "n_verification_failures": 0,
+  "only_p": [
+    500
+  ],
+  "wall_seconds": 18998.003050667,
+  "witness_files": [
+    "results/kidney_k3_real_sweep_v2/witnesses.jsonl",
+    "results/kidney_real_data_sweep_v2/witnesses.jsonl",
+    "/tmp/kidney_smoke_cap/witnesses.jsonl"
+  ]
+}

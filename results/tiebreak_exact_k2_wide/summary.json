@@ -1,0 +1,33 @@
+{
+  "by_K_P_bucket": {
+    "K2_P100": {
+      "WEAK": 3
+    },
+    "K2_P102": {
+      "WEAK": 2
+    },
+    "K2_P250": {
+      "WEAK": 7
+    },
+    "K2_P30": {
+      "WEAK": 4
+    },
+    "K2_P48": {
+      "WEAK": 5
+    },
+    "K2_P50": {
+      "WEAK": 8
+    },
+    "K2_P500": {
+      "WEAK": 1
+    },
+    "K2_P6": {
+      "WEAK": 164
+    },
+    "K2_P750": {
+      "WEAK": 2
+    }
+  },
+  "flagged_witness_ids": [],
+  "total_processed": 196
+}

@@ -143,7 +143,7 @@
       "unit": "hospital_check",
       "eligibility": "The 9 IR-only discordant pairs from the paired run. Both arms use the SAME lexicographic tie-break; the control arm is the IR model with all standalone floors set to zero, which makes the constraint vacuous while holding the tie-break fixed.",
       "sources": [
-        "results/kidney_ir_paired_p250_w1/paired_rows.jsonl"
+        "results/kidney_ir_paired_p250_w*/paired_rows.jsonl"
       ],
       "arms": {
         "a": {
@@ -188,7 +188,7 @@
       "unit": "verified_deviation",
       "eligibility": "Deviations where both u_true_min and u_true_max were proven optimal, the realized truthful utility lay inside that range, and replay verification did not fail.",
       "sources": [
-        "results/kidney_tiebreak_census_p250/hospital_rows.jsonl"
+        "results/kidney_tiebreak_census_k2_p*/hospital_rows.jsonl"
       ],
       "status": "verified",
       "derivation": "claim_a_k2_corroboration",

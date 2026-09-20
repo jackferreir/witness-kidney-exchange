@@ -82,12 +82,43 @@ def check_schema(c: dict) -> list:
 
 
 def check_provenance(c: dict) -> list:
-    """P0: every cited source must exist on disk."""
+    """P0: every cited source must exist AND be a file the derivation reads.
+
+    Existence alone is too weak, as the historical-error suite showed: the
+    README once cited `scripts/clustered_inference.py` for a comparison that
+    script never performed. The file was right there on disk. What makes a
+    citation real is that the computation producing the number actually
+    touched it, so the declared sources are checked against the sources the
+    Measurement carries.
+    """
     out = []
-    for path in c.get("sources", []):
+    cid = c["id"]
+    declared = list(c.get("sources", []))
+    for path in declared:
         full = os.path.join(PROJECT_ROOT, path)
-        if not os.path.exists(full):
-            out.append(_fail(c["id"], "PROVENANCE", f"cited source does not exist: {path}"))
+        if not os.path.exists(full) and "*" not in path:
+            out.append(_fail(cid, "PROVENANCE", f"cited source does not exist: {path}"))
+
+    deriv = c.get("derivation")
+    if not deriv:
+        return out
+    try:
+        from witness.derivations import REGISTRY
+        result = REGISTRY[deriv]()
+    except Exception:  # noqa: BLE001
+        return out  # C4 reports this
+    measurements = list(result[:2]) if isinstance(result, tuple) else [result]
+    actually_read = set()
+    for m in measurements:
+        actually_read.update(m.sources)
+    if actually_read:
+        uncited = {s for s in declared if s not in actually_read}
+        if uncited:
+            out.append(_fail(
+                cid, "PROVENANCE",
+                f"claim cites {sorted(uncited)}, which the derivation never reads. "
+                f"The derivation reads {sorted(actually_read)}. A file that exists but "
+                f"does not produce the number is not a source for it."))
     return out
 
 
