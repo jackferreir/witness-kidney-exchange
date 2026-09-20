@@ -226,6 +226,24 @@
         "denominator": 94655
       },
       "challenge": "Adversarial dense regimes (d=0.30, d=0.45) where 17-21% of INDETERMINATE hospitals do manipulate were run specifically to break this; determinacy held. Hospitals already matching all their own pairs are excluded, since they cannot gain by construction and would pad the denominator."
+    },
+    {
+      "id": "minimal_boundary_counterexample",
+      "text": "The k=2/k>=3 boundary in MODEL.md's theorem has its first counterexample at exactly 4 pairs: a determinate hospital that profits by withholding at k=3, proven minimal by exhaustive enumeration over every digraph and ownership split, not sampling.",
+      "kind": "measurement",
+      "scope": "Exhaustive over ALL directed graphs and ALL non-trivial ownership splits on n=3 and n=4 labeled pairs, at k=2 and k=3. Does not claim anything about n>=5 -- only that n<=3 is impossible and n=4 is not, which is what 'minimal' requires.",
+      "unit": "exhaustive_scan",
+      "eligibility": "All four (n,k) cells claimed in scripts/kidney_minimal_boundary_search.py's own docstring: (3,2), (3,3), (4,2), (4,3). No exclusions -- every digraph and split is enumerated, not filtered.",
+      "sources": [
+        "scripts/kidney_minimal_boundary_search.py"
+      ],
+      "derivation": "minimal_boundary_search",
+      "expect": {
+        "numerator": 4,
+        "denominator": 4
+      },
+      "challenge": "The identical code, same n=4, finds 204/49,888 at k=3 while finding 0/46,976 at k=2 -- proving the search can detect a violation when one exists, so the k=2 zero and the n=3 zero are not artifacts of the search being too weak to find one. A single concrete instance (KIDMIN-A) is additionally hand-verified against the independent oracle in tests/test_kidney_minimal_boundary.py, including that every one of its 5 edges is load-bearing.",
+      "status": "verified"
     }
   ]
 }

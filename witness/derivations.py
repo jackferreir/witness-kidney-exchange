@@ -74,6 +74,34 @@ def cycle_length_p250_paired():
 
 
 # --------------------------------------------------------------------------
+# minimal_boundary_counterexample
+# --------------------------------------------------------------------------
+
+def minimal_boundary_search():
+    """Runs the actual exhaustive enumeration (not a stored number) proving
+    4 pairs is the minimum market size containing a determinate hospital
+    that can profit at k=3, and that k=2 has NO such market at n=3 or n=4.
+    Rows here are (n, k) SCANS, not hospital-checks, so this returns a
+    Measurement whose unit is the scan itself and whose 'hit' is exact
+    equality with the value scripts/kidney_minimal_boundary_search.py's
+    own docstring claims -- re-running the search IS the check."""
+    import scripts.kidney_minimal_boundary_search as search
+    expected = {(3, 2): (342, 0), (3, 3): (372, 0), (4, 2): (46976, 0), (4, 3): (49888, 204)}
+    rows = []
+    for (n, k), (exp_checked, exp_hits) in expected.items():
+        checked, hits = search.scan(n, k)
+        rows.append({"n": n, "k": k, "checked": checked, "hits": hits,
+                     "matches_docstring": (checked, hits) == (exp_checked, exp_hits)})
+    return Measurement.from_rows(
+        rows, unit="exhaustive_scan",
+        eligibility="all four (n,k) cells the module docstring makes claims about",
+        eligible=lambda r: True,
+        hit=lambda r: r["matches_docstring"],
+        config_of=lambda r: {"n": r["n"], "k": r["k"]},
+        sources=["scripts/kidney_minimal_boundary_search.py"])
+
+
+# --------------------------------------------------------------------------
 # ir_creates_manipulations
 # --------------------------------------------------------------------------
 
@@ -155,6 +183,7 @@ def claim_a_k2_corroboration():
 
 
 REGISTRY = {
+    "minimal_boundary_search": minimal_boundary_search,
     "cycle_length_p250_paired": cycle_length_p250_paired,
     "ir_paired_rates": ir_paired_rates,
     "determinacy_k2_synth": determinacy_k2_synth,
