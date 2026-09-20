@@ -48,6 +48,8 @@ import os
 import sys
 
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
 REGISTRY = os.path.join(PROJECT_ROOT, "claims.json")
 
 UNIVERSALS = ("never", "always", "every", "no ", "all ", "none", "not one", "zero ")
@@ -147,6 +149,90 @@ def check_eligibility(c: dict) -> list:
     return out
 
 
+def check_rederivation(c: dict) -> list:
+    """C4: the registered figure must be reproduced by executing code.
+
+    This is what makes an inherited or hand-typed number impossible to ship.
+    'Gain is always exactly 1' survived because it was a sentence, not a
+    computation; a number that must be regenerated from rows on every run
+    cannot outlive the method that produced it.
+    """
+    out = []
+    cid = c["id"]
+    deriv = c.get("derivation")
+    if not deriv:
+        return [_fail(cid, "REDERIVATION",
+                      "no 'derivation' given. Every figure must name a function in "
+                      "witness.derivations that regenerates it from raw rows.")]
+    try:
+        from witness.derivations import REGISTRY
+    except Exception as exc:  # noqa: BLE001
+        return [_fail(cid, "REDERIVATION", f"cannot import witness.derivations: {exc!r}")]
+    if deriv not in REGISTRY:
+        return [_fail(cid, "REDERIVATION", f"derivation {deriv!r} is not in witness.derivations.REGISTRY")]
+
+    try:
+        result = REGISTRY[deriv]()
+    except Exception as exc:  # noqa: BLE001
+        return [_fail(cid, "REDERIVATION", f"derivation {deriv!r} raised {type(exc).__name__}: {str(exc)[:160]}")]
+
+    expected = c.get("expect")
+    if not expected:
+        return [_fail(cid, "REDERIVATION", "no 'expect' block to check the derivation against")]
+
+    if isinstance(result, tuple):
+        a, b, varies = result
+        try:
+            a.compare_to(b, varies=varies)
+        except Exception as exc:  # noqa: BLE001
+            return [_fail(cid, "REDERIVATION", f"arms are not comparable: {str(exc)[:160]}")]
+        got = {"a_numerator": a.numerator, "a_denominator": a.denominator,
+               "b_numerator": b.numerator, "b_denominator": b.denominator,
+               "varies": sorted(varies)}
+    else:
+        got = {"numerator": result.numerator, "denominator": result.denominator}
+
+    for k, want in expected.items():
+        if k not in got:
+            out.append(_fail(cid, "REDERIVATION", f"'expect' names {k!r}, which the derivation does not produce"))
+        elif got[k] != want:
+            out.append(_fail(
+                cid, "REDERIVATION",
+                f"{k}: registry says {want!r}, re-derivation gives {got[k]!r}. "
+                f"Either the registry is stale or the derivation does not compute the claimed quantity."))
+    return out
+
+
+def check_extreme_challenged(c: dict) -> list:
+    """C5: a perfect or thinly-supported number needs a recorded adversarial
+    check before it may be asserted.
+
+    REVIEWER.md has said 'perfect numbers are artifact-shaped' in prose for a
+    long time; that did not stop 0-of-490,147 being reported before anyone
+    asked whether the denominator contained units that could move. A rate of
+    exactly 0 or 1 now has to arrive with the name of the test that tried to
+    break it.
+    """
+    out = []
+    deriv = c.get("derivation")
+    if not deriv:
+        return out
+    try:
+        from witness.derivations import REGISTRY
+        result = REGISTRY[deriv]()
+    except Exception:  # noqa: BLE001
+        return out  # C4 already reported it
+    measurements = list(result[:2]) if isinstance(result, tuple) else [result]
+    for m in measurements:
+        reason = m.is_extreme()
+        if reason and not (c.get("challenge") or "").strip():
+            out.append(_fail(
+                c["id"], "EXTREME",
+                f"{reason}. An extreme figure must carry a 'challenge' field naming the "
+                f"adversarial check that was run against it and did not break it."))
+    return out
+
+
 def verify(registry_path: str = REGISTRY, quiet: bool = False) -> list:
     with open(registry_path) as f:
         reg = json.load(f)
@@ -175,12 +261,29 @@ def verify(registry_path: str = REGISTRY, quiet: bool = False) -> list:
                 print(f"  - {cid}: RETRACTED (exempt) -- {c['retraction'][:70]}...")
             continue
 
-        failures.extend(check_provenance(c))
-        failures.extend(check_commensurability(c))
-        failures.extend(check_scope(c))
-        failures.extend(check_eligibility(c))
-        if not quiet:
-            print(f"  - {cid}: ok")
+        # 'under_review' means registered but NOT cleared to appear anywhere
+        # public. It is exempt from re-derivation -- often the inability to
+        # re-derive is precisely why it is under review -- but it must say
+        # what is blocking it, so the state cannot be used to park a claim
+        # out of reach of the checks.
+        if c["status"] == "under_review":
+            if not (c.get("blocker") or "").strip():
+                failures.append(_fail(cid, "SCHEMA",
+                                      "status is 'under_review' but no 'blocker' field says what is missing"))
+            elif not quiet:
+                print(f"  - {cid}: UNDER REVIEW, not publishable -- {c['blocker'][:60]}...")
+            continue
+
+        errs = []
+        errs.extend(check_provenance(c))
+        errs.extend(check_commensurability(c))
+        errs.extend(check_scope(c))
+        errs.extend(check_eligibility(c))
+        errs.extend(check_rederivation(c))
+        errs.extend(check_extreme_challenged(c))
+        failures.extend(errs)
+        if not quiet and not errs:
+            print(f"  - {cid}: ok (re-derived)")
     return failures
 
 

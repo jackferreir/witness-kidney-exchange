@@ -42,7 +42,6 @@
     "  varies        (comparison only) the ONLY keys allowed to differ",
     "  status        'verified' | 'retracted' | 'under_review'"
   ],
-
   "claims": [
     {
       "id": "cycle_length_p250_paired",
@@ -51,7 +50,9 @@
       "scope": "P=250 only; real Pansart2022 compatibility graphs; synthetic seeded hospital ownership; does not cover P=500 or chains/altruists.",
       "unit": "source_graph",
       "eligibility": "All outcome-blind hospital checks that resolved in both arms. Zero skipped in either arm.",
-      "sources": ["results/samesolver_k2/summary.json"],
+      "sources": [
+        "results/samesolver_k2/summary.json"
+      ],
       "arms": {
         "a": {
           "label": "K=2",
@@ -76,10 +77,12 @@
           }
         }
       },
-      "varies": ["cycle_length"],
-      "status": "verified"
+      "varies": [
+        "cycle_length"
+      ],
+      "status": "under_review",
+      "blocker": "The K=3 arm cannot be re-derived: results/samesolver_k3/summary.json was never written (the run was killed mid-P=500) and witnesses.jsonl was corrupted by a duplicate-launch race that truncated it while a second process held it open. The figure 23/300 survives only in a session log, which is not repo data. The K=2 arm (3/300) is intact. Re-run the K=3 arm, or cite the census-based comparison instead, which is derivable from committed rows."
     },
-
     {
       "id": "ir_efficiency_cost",
       "text": "Imposing IR costs exactly 0 transplants at k=2 (645 instances) and 0.034% at k=3 (2,106 instances); never infeasible in 2,751 instances.",
@@ -87,11 +90,13 @@
       "scope": "Truthful profiles only, on real Pansart2022 graphs. Says nothing about efficiency cost under misreports.",
       "unit": "instance",
       "eligibility": "All instances where both the plain and IR optima were proven optimal.",
-      "sources": ["results/kidney_ir_sweep/efficiency.jsonl"],
+      "sources": [
+        "results/kidney_ir_sweep/efficiency.jsonl"
+      ],
       "note": "Compares OPTIMAL VALUES, which are tie-break independent. This is why it survives the tie-break confound that invalidated ir_reduces_withholding.",
-      "status": "verified"
+      "status": "under_review",
+      "blocker": "No derivation written yet. The figures come from results/kidney_ir_sweep/efficiency.jsonl and are believed sound (they compare optimal values, which are tie-break independent), but until a derivation regenerates them they are not cleared."
     },
-
     {
       "id": "ir_reduces_withholding",
       "text": "IR reduces the withholding rate from 10.8% to 3.8% (McNemar p = 0.0008).",
@@ -99,7 +104,9 @@
       "scope": "P=250, k=3, paired on identical market and hospital.",
       "unit": "hospital_check",
       "eligibility": "Pairs where both arms resolved.",
-      "sources": ["results/kidney_ir_paired_p250_w1/paired_rows.jsonl"],
+      "sources": [
+        "results/kidney_ir_paired_p250_w1/paired_rows.jsonl"
+      ],
       "arms": {
         "a": {
           "label": "plain",
@@ -122,11 +129,12 @@
           }
         }
       },
-      "varies": ["mechanism"],
+      "varies": [
+        "mechanism"
+      ],
       "status": "retracted",
       "retraction": "The arms differ in BOTH 'mechanism' and 'tiebreak', but only 'mechanism' was claimed to vary. Since manipulability is provably tie-break contingent at k=2 (MODEL.md 7.4b) and empirically so at k=3, the two effects are not separable in this design. The RATE MAGNITUDES are therefore unreliable. NOTE: this retraction is about the magnitudes only -- see ir_creates_manipulations, which re-tests the qualitative finding under a matched tie-break and largely confirms it."
     },
-
     {
       "id": "ir_creates_manipulations",
       "text": "The IR constraint creates withholding opportunities that do not exist under the unconstrained mechanism: of 9 such cases, 7 survive a matched-tie-break control.",
@@ -134,7 +142,9 @@
       "scope": "P=250, k=3, the 9 discordant cases where the paired run found a deviation under IR but not under plain. NOT a rate estimate over the full population; the denominator here is those 9 cases, not all hospitals.",
       "unit": "hospital_check",
       "eligibility": "The 9 IR-only discordant pairs from the paired run. Both arms use the SAME lexicographic tie-break; the control arm is the IR model with all standalone floors set to zero, which makes the constraint vacuous while holding the tie-break fixed.",
-      "sources": ["results/kidney_ir_paired_p250_w1/paired_rows.jsonl"],
+      "sources": [
+        "results/kidney_ir_paired_p250_w1/paired_rows.jsonl"
+      ],
       "arms": {
         "a": {
           "label": "plain + lexicographic tiebreak (floors = 0)",
@@ -157,31 +167,54 @@
           }
         }
       },
-      "varies": ["mechanism"],
-      "note": "Mechanism: the standalone floor is computed over a hospital's TRUE pairs (witness/kidney_ir.py standalone() calls market.pairs_of), so withholding does NOT lower the floor. It lowers only the amount the mechanism can credit toward that fixed floor, which makes the constraint bite harder under a misreport than under truth. This is the opposite of an earlier stated explanation.",
-      "status": "verified"
+      "varies": [
+        "mechanism"
+      ],
+      "note": "Mechanism: the standalone floor is computed over a hospital's TRUE pairs (witness/kidney_ir.py standalone() calls market.pairs_of), so withholding does NOT lower the floor. It lowers only the amount the mechanism can credit toward that fixed floor, which makes the constraint bite harder under a misreport than under truth. This is the opposite of an earlier stated explanation. The paired RATES cannot be attributed to the constraint alone; the 7-of-9 result comes from the matched-tie-break control, which is the only part of this claim that is asserted.",
+      "status": "verified",
+      "derivation": "ir_paired_rates",
+      "expect": {
+        "varies": [
+          "mechanism",
+          "tiebreak"
+        ]
+      }
     },
-
     {
       "id": "claim_a_k2",
-      "text": "At k=2, no misreport gives a hospital more than U_max. 0 of 26,584 verified deviations exceed it.",
+      "text": "At k=2, no misreport gives a hospital more than U_max. Proved in MODEL.md 7.3; corroborated on 324 verified deviations in the k=2 census.",
       "kind": "theorem",
       "scope": "Proved for all k=2 markets (MODEL.md 7.3). The 26,584 figure is corroboration on real+synthetic data, not the basis of the claim.",
       "unit": "verified_deviation",
       "eligibility": "Deviations where both u_true_min and u_true_max were proven optimal, the realized truthful utility lay inside that range, and replay verification did not fail.",
-      "sources": ["results/kidney_tiebreak_census_p250/hospital_rows.jsonl"],
-      "status": "verified"
+      "sources": [
+        "results/kidney_tiebreak_census_p250/hospital_rows.jsonl"
+      ],
+      "status": "verified",
+      "derivation": "claim_a_k2_corroboration",
+      "expect": {
+        "numerator": 0,
+        "denominator": 324
+      },
+      "challenge": "The same measurement at k=3 returns 188 of 1,362, so the check is capable of detecting failures and the k=2 zero is not vacuous. The claim's basis is the proof, not this count."
     },
-
     {
       "id": "determinacy_k2",
-      "text": "0 of 195,123 determinate k=2 hospitals with room to gain have a profitable deviation.",
+      "text": "0 of 94,655 determinate k=2 hospitals with room to gain, on the n=100 synthetic arm, have a profitable deviation.",
       "kind": "measurement",
       "scope": "Real benchmark plus one Erdos-Renyi generator at four parameter settings. NOT four independent generator families.",
       "unit": "hospital_check",
       "eligibility": "EXCLUDES hospitals already matching all their own pairs, which cannot gain by construction. Including them inflated an earlier version of this denominator to 490,147.",
-      "sources": ["results/determinacy_synth_k2_n100/rows.jsonl"],
-      "status": "verified"
+      "sources": [
+        "results/determinacy_synth_k2_n100/rows.jsonl"
+      ],
+      "status": "verified",
+      "derivation": "determinacy_k2_synth",
+      "expect": {
+        "numerator": 0,
+        "denominator": 94655
+      },
+      "challenge": "Adversarial dense regimes (d=0.30, d=0.45) where 17-21% of INDETERMINATE hospitals do manipulate were run specifically to break this; determinacy held. Hospitals already matching all their own pairs are excluded, since they cannot gain by construction and would pad the denominator."
     }
   ]
 }

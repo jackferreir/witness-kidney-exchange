@@ -118,3 +118,97 @@ def test_required_fields_cannot_be_omitted(field):
         c.pop(field)
         failures = verify(_write(d, [c]), quiet=True)
     assert any("SCHEMA" in f and field in f for f in failures), failures
+
+
+# --------------------------------------------------------------------------
+# The deeper layer: errors are born at aggregation, not at publication.
+# These pin witness/measurement.py, which is what makes the incommensurable
+# comparison unrepresentable rather than merely discouraged.
+# --------------------------------------------------------------------------
+
+from witness.measurement import (  # noqa: E402
+    HeterogeneousRowsError,
+    IncommensurableError,
+    Measurement,
+)
+
+
+def _m(hit_key, cfg, rows=None, elig="all rows", unit="hospital_check"):
+    rows = rows or [{"h": i % 3 == 0, "k": cfg.get("cycle_length", 2)} for i in range(60)]
+    return Measurement.from_rows(
+        rows, unit=unit, eligibility=elig, eligible=lambda r: True,
+        hit=lambda r: bool(r[hit_key]), config_of=lambda r: cfg, sources=["fixture"])
+
+
+def test_measurement_blocks_the_real_plain_vs_ir_error():
+    """The exact error, at the moment it was born rather than published."""
+    plain = _m("h", {"mechanism": "plain", "tiebreak": "ilp", "cycle_length": 3})
+    ir = _m("h", {"mechanism": "ir", "tiebreak": "lexicographic", "cycle_length": 3})
+    with pytest.raises(IncommensurableError, match="tiebreak"):
+        plain.compare_to(ir, varies=["mechanism"])
+
+
+def test_measurement_allows_the_honest_weaker_attribution():
+    plain = _m("h", {"mechanism": "plain", "tiebreak": "ilp", "cycle_length": 3})
+    ir = _m("h", {"mechanism": "ir", "tiebreak": "lexicographic", "cycle_length": 3})
+    out = plain.compare_to(ir, varies=["mechanism", "tiebreak"])
+    assert out["varies"] == ["mechanism", "tiebreak"]
+
+
+def test_measurement_refuses_comparison_across_different_populations():
+    """A rate difference measured on different admissible sets is not an effect."""
+    a = _m("h", {"cycle_length": 2}, elig="determinate only")
+    b = _m("h", {"cycle_length": 3}, elig="determinate AND room to gain")
+    with pytest.raises(IncommensurableError, match="eligibility"):
+        a.compare_to(b, varies=["cycle_length"])
+
+
+def test_measurement_refuses_silent_pooling():
+    """Collapsing two cycle lengths into one denominator must be deliberate."""
+    rows = [{"h": False, "k": 2} for _ in range(30)] + [{"h": True, "k": 3} for _ in range(30)]
+    with pytest.raises(HeterogeneousRowsError, match="cycle_length"):
+        Measurement.from_rows(
+            rows, unit="hospital_check", eligibility="all", eligible=lambda r: True,
+            hit=lambda r: bool(r["h"]),
+            config_of=lambda r: {"cycle_length": r["k"]}, sources=["fixture"])
+
+
+def test_measurement_allows_declared_pooling():
+    rows = [{"h": False, "k": 2} for _ in range(30)] + [{"h": True, "k": 3} for _ in range(30)]
+    m = Measurement.from_rows(
+        rows, unit="hospital_check", eligibility="all", eligible=lambda r: True,
+        hit=lambda r: bool(r["h"]), config_of=lambda r: {"cycle_length": r["k"]},
+        sources=["fixture"], pool_over=["cycle_length"])
+    assert m.pooled_over == ("cycle_length",)
+
+
+def test_perfect_rates_are_flagged_extreme():
+    """'Perfect numbers are artifact-shaped' as a property of the object."""
+    zero = Measurement.from_rows(
+        [{"h": False} for _ in range(500)], unit="hospital_check", eligibility="all",
+        eligible=lambda r: True, hit=lambda r: r["h"], config_of=lambda r: {"k": 2},
+        sources=["fixture"])
+    assert "exactly 0" in (zero.is_extreme() or "")
+
+
+def test_thin_denominators_are_flagged_extreme():
+    thin = Measurement.from_rows(
+        [{"h": i == 0} for i in range(9)], unit="market", eligibility="all",
+        eligible=lambda r: True, hit=lambda r: r["h"], config_of=lambda r: {"k": 2},
+        sources=["fixture"])
+    assert "only 9" in (thin.is_extreme() or "")
+
+
+def test_empty_denominator_is_an_error_not_a_zero():
+    with pytest.raises(ValueError, match="empty denominator"):
+        Measurement.from_rows(
+            [{"h": True}], unit="x", eligibility="none qualify",
+            eligible=lambda r: False, hit=lambda r: r["h"],
+            config_of=lambda r: {}, sources=["fixture"])
+
+
+def test_unit_and_eligibility_cannot_be_blank():
+    with pytest.raises(ValueError):
+        Measurement.from_rows(
+            [{"h": True}], unit="", eligibility="stated", eligible=lambda r: True,
+            hit=lambda r: r["h"], config_of=lambda r: {}, sources=["fixture"])
